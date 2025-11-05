@@ -1,110 +1,103 @@
 body {
-  background-color: #0a0a0a;
-  color: #f1f1f1;
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
-header {
+.container {
+  max-width: 800px;
+  margin: auto;
   padding: 20px;
-  border-bottom: 1px solid #222;
 }
 
-.logo {
+header .logo {
   width: 120px;
   margin-bottom: 10px;
 }
 
 h1 {
-  color: #00bcd4;
-}
-
-.subtitle {
-  color: #ccc;
-}
-
-main {
-  max-width: 850px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #111;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0, 188, 212, 0.2);
-}
-
-.calculator, .graph {
-  margin-bottom: 40px;
-}
-
-.subject {
-  border: 1px solid #222;
-  border-radius: 12px;
-  padding: 10px;
-  margin: 10px 0;
-  background: #1a1a1a;
-}
-
-input, select, button {
-  margin: 10px;
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1em;
-}
-
-input, select {
-  background: #222;
-  color: white;
-  width: 180px;
+  color: #58a6ff;
 }
 
 button {
-  background: #00bcd4;
-  color: black;
-  font-weight: bold;
+  background: #238636;
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: 0.3s;
+  font-size: 16px;
 }
 
 button:hover {
-  background: #0097a7;
-  color: white;
+  background: #2ea043;
 }
 
-.info-grid {
+.input-section,
+.previous-info {
+  margin: 20px 0;
+}
+
+.previous-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.previous-info div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#subjectsContainer {
+  margin: 15px 0;
+}
+
+.subject-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.subject-row input,
+.subject-row select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #30363d;
+  background: #161b22;
+  color: #e6edf3;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.chart-section {
+  margin-top: 40px;
+}
+
+.hidden {
+  display: none;
+}
+
+.chart-buttons {
+  margin-top: 10px;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.graph-buttons {
-  margin-top: 15px;
+  gap: 10px;
 }
 
 footer {
-  padding: 20px;
-  background: #111;
-  color: #aaa;
-  font-size: 0.9em;
-  border-top: 1px solid #222;
-}
-
-.motivation {
-  margin-top: 20px;
-  color: #00ffcc;
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-/* 📱 Mobile Friendly */
-@media (max-width: 600px) {
-  input, select {
-    width: 100%;
-  }
-  .info-grid {
-    flex-direction: column;
-    align-items: center;
-  }
+  margin-top: 40px;
+  font-size: 14px;
+  color: #8b949e;
 }
