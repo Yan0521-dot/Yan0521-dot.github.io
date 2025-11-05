@@ -1,51 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  color: #eaf0ff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .container {
   background: rgba(255, 255, 255, 0.08);
-  padding: 35px;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  width: 90%;
-  max-width: 650px;
-  text-align: center;
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  animation: fadeIn 1s ease-in-out;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  width: 90%;
+  max-width: 700px;
+  text-align: center;
+  animation: fadeIn 0.8s ease-in-out;
 }
 
 h1 {
   font-size: 2rem;
   margin-bottom: 10px;
-  background: linear-gradient(90deg, #ffcc70, #ffb703);
+  background: linear-gradient(90deg, #00f5d4, #9b5de5);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .tagline {
   font-size: 1rem;
-  opacity: 0.9;
+  opacity: 0.85;
   margin-bottom: 25px;
 }
 
 label {
   display: block;
-  margin: 12px 0 5px;
-  font-weight: 500;
+  margin: 12px 0 6px;
+  font-weight: 600;
 }
 
 input, select {
@@ -54,52 +56,27 @@ input, select {
   border: none;
   border-radius: 10px;
   outline: none;
-  margin: 8px 0;
-  font-size: 0.95rem;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
-  background: rgba(255, 255, 255, 0.15);
-  transition: 0.3s;
-}
-
-input:focus, select:focus {
-  background: rgba(255, 255, 255, 0.25);
-  transform: scale(1.02);
-}
-
-select {
-  cursor: pointer;
-  appearance: none;
-  text-align: center;
-  background-image: linear-gradient(45deg, transparent 50%, #ffb703 50%),
-                    linear-gradient(135deg, #ffb703 50%, transparent 50%);
-  background-position: calc(100% - 20px) calc(1em + 2px), 
-                       calc(100% - 15px) calc(1em + 2px);
-  background-size: 5px 5px, 5px 5px;
-  background-repeat: no-repeat;
-}
-
-select option {
-  background-color: #243b55;
-  color: #fff;
-  padding: 10px;
 }
 
 button {
-  background: linear-gradient(90deg, #ffcc70, #ffb703);
-  color: #222;
+  background: linear-gradient(90deg, #00f5d4, #9b5de5);
+  color: #111;
   border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 12px 20px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: bold;
-  transition: 0.3s;
-  margin-top: 12px;
-  font-size: 1rem;
+  transition: 0.3s ease;
+  margin-top: 10px;
 }
 
 button:hover {
-  background: linear-gradient(90deg, #ffb703, #ffcc70);
-  transform: scale(1.07);
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #00f5d4;
 }
 
 .hidden {
@@ -107,21 +84,20 @@ button:hover {
 }
 
 #result {
-  margin-top: 25px;
-  padding: 18px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
   animation: fadeIn 0.8s ease-in-out;
 }
 
 footer {
-  margin-top: 30px;
-  font-size: 0.85rem;
-  opacity: 0.8;
-  letter-spacing: 0.5px;
+  margin-top: 25px;
+  font-size: 0.8rem;
+  opacity: 0.6;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
