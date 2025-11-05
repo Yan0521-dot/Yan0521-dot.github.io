@@ -3,56 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniRazak GPA & CGPA Tracker</title>
+  <title>UniRazak CGPA & GPA Calculator</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <img src="unirazak_logo1.png" alt="UniRazak Logo" class="logo" />
-      <h1>🎓 UniRazak GPA & CGPA Tracker</h1>
-      <p>Calculate, predict & track your academic progress 🚀</p>
-    </header>
+  <header>
+    <img src="unirazak_logo.png" alt="UniRazak Logo" class="logo" />
+    <h1>UniRazak GPA & CGPA Tracker</h1>
+    <p class="subtitle">Track. Predict. Improve. 🚀</p>
+  </header>
 
-    <div class="input-section">
-      <label for="numSubjects">Number of subjects this semester:</label>
-      <input type="number" id="numSubjects" min="1" />
+  <main>
+    <section class="calculator-card">
+      <h2>✨ CGPA & GPA Calculator ✨</h2>
+      <p class="tagline">Made for UniRazak Students 💪</p>
+
+      <label for="numSubjects">How many subjects this semester?</label>
+      <input type="number" id="numSubjects" placeholder="e.g. 6" min="1" />
       <button id="generateFields">Generate Fields</button>
-    </div>
 
-    <form id="gpaForm" style="display:none;">
       <div id="subjectsContainer"></div>
 
-      <div class="previous-info">
-        <div>
-          <label>Total Previous Credits:</label>
-          <input type="number" id="prevCredits" min="0" />
-        </div>
-        <div>
-          <label>Previous CGPA:</label>
-          <input type="number" id="prevCgpa" step="0.01" min="0" max="4" />
-        </div>
+      <div id="prevSection" class="hidden">
+        <h3>Previous Semester Info</h3>
+        <input type="number" id="prevCredits" placeholder="Total previous credits" />
+        <input type="number" id="prevCgpa" placeholder="Previous CGPA" step="0.01" />
       </div>
 
-      <button type="button" id="calculateBtn">Calculate GPA & CGPA</button>
-    </form>
+      <button id="calculateBtn" class="hidden">Calculate GPA & CGPA</button>
+      <div id="result" class="hidden"></div>
+    </section>
 
-    <div id="result" class="result"></div>
-
-    <div id="chartSection" class="chart-section hidden">
-      <h2>📈 Track Your Progress</h2>
+    <section id="chartSection" class="hidden">
+      <h3>📊 Track Your Progress</h3>
       <canvas id="progressChart"></canvas>
       <div class="chart-buttons">
         <button id="saveChart">Save</button>
-        <button id="resetChart">Reset</button>
+        <button id="resetChart" class="danger">Reset</button>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
-  <footer>© 2025 by Aathityan | Made for UniRazak Students ❤️</footer>
+  <footer>
+    © 2025 by Aathityan | Made for UniRazak Students ❤️<br>
+    <small>More features coming soon — GPA Graphs & Leaderboard 🔥</small>
+  </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
-
