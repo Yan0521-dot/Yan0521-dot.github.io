@@ -3,13 +3,28 @@ document.getElementById("generateFields").addEventListener("click", function () 
   const container = document.getElementById("subjectsContainer");
   container.innerHTML = "";
 
+  if (!numSubjects || numSubjects < 1) {
+    alert("Please enter a valid number of subjects!");
+    return;
+  }
+
+  // Ask for subject names
+  const subjectNames = [];
   for (let i = 1; i <= numSubjects; i++) {
+    let name = prompt(`Enter the name of subject ${i}:`);
+    if (!name || name.trim() === "") name = `Subject ${i}`;
+    subjectNames.push(name.trim());
+  }
+
+  // Generate subject fields dynamically
+  for (let i = 0; i < numSubjects; i++) {
     container.innerHTML += `
       <div class="subject">
-        <h4>Subject ${i}</h4>
-        Credit hours: <input type="number" id="credit${i}" step="0.01" min="0" />
-        Grade:
-        <select id="grade${i}">
+        <h4>${subjectNames[i]}</h4>
+        <label>Credit hours:</label>
+        <input type="number" id="credit${i + 1}" step="0.01" min="0" />
+        <label>Grade:</label>
+        <select id="grade${i + 1}">
           <option value="A+">A+</option>
           <option value="A">A</option>
           <option value="A-">A-</option>
