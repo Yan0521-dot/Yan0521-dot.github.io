@@ -1,133 +1,66 @@
-let courses = [];
+const generateBtn = document.getElementById("generate");
+const calculateBtn = document.getElementById("calculate");
+const subjectsContainer = document.getElementById("subjects-container");
+const resultDiv = document.getElementById("result");
+const cgpaSection = document.getElementById("cgpa-section");
 
-function addCourse() {
-    const courseName = document.getElementById('courseName').value.trim();
-    const credits = parseFloat(document.getElementById('credits').value);
-    const gradeValue = document.getElementById('grade').value;
+generateBtn.addEventListener("click", () => {
+  const numSubjects = parseInt(document.getElementById("subjects").value);
+  subjectsContainer.innerHTML = "";
 
-    if (!credits || credits <= 0) {
-        alert('Please enter valid credit hours');
-        return;
+  if (!numSubjects || numSubjects <= 0) {
+    alert("Please enter a valid number of subjects!");
+    return;
+  }
+
+  for (let i = 1; i <= numSubjects; i++) {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <h3>Subject ${i}</h3>
+      <input type="number" placeholder="Credit Hours" id="credit${i}" min="1" />
+      <input type="number" placeholder="Grade Point (e.g. 4.0)" step="0.01" id="grade${i}" />
+    `;
+    subjectsContainer.appendChild(div);
+  }
+
+  cgpaSection.classList.remove("hidden");
+  calculateBtn.classList.remove("hidden");
+});
+
+calculateBtn.addEventListener("click", () => {
+  let totalCredits = 0;
+  let totalGradePoints = 0;
+  const numSubjects = parseInt(document.getElementById("subjects").value);
+
+  for (let i = 1; i <= numSubjects; i++) {
+    const credit = parseFloat(document.getElementById(`credit${i}`).value);
+    const grade = parseFloat(document.getElementById(`grade${i}`).value);
+
+    if (!credit || !grade) {
+      alert(`Please fill all fields for Subject ${i}`);
+      return;
     }
 
-    if (!gradeValue) {
-        alert('Please select a grade');
-        return;
-    }
+    totalCredits += credit;
+    totalGradePoints += credit * grade;
+  }
 
-    const course = {
-        id: Date.now(),
-        name: courseName || `Course ${courses.length + 1}`,
-        credits: credits,
-        grade: gradeValue === 'S' || gradeValue === 'U' ? gradeValue : parseFloat(gradeValue),
-        isUngraded: gradeValue === 'S' || gradeValue === 'U'
-    };
+  const GPA = totalGradePoints / totalCredits;
+  const prevCredits = parseFloat(document.getElementById("prev-credits").value) || 0;
+  const prevCGPA = parseFloat(document.getElementById("prev-cgpa").value) || 0;
 
-    courses.push(course);
-    updateDisplay();
-    clearInputs();
-}
+  const CGPA = (prevCGPA * prevCredits + GPA * totalCredits) / (prevCredits + totalCredits || 1);
 
-function removeCourse(id) {
-    courses = courses.filter(course => course.id !== id);
-    updateDisplay();
-}
+  let message = "";
+  if (GPA >= 3.7) message = "🔥 Outstanding! You’re on fire!";
+  else if (GPA >= 3.0) message = "💪 Great job! Keep pushing forward!";
+  else if (GPA >= 2.0) message = "📈 You’re doing fine. A bit more effort and you’ll shine!";
+  else message = "🌱 Don’t give up. Every semester is a new chance to rise!";
 
-function updateDisplay() {
-    const coursesList = document.getElementById('coursesList');
-    
-    if (courses.length === 0) {
-        coursesList.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">No courses added yet</p>';
-    } else {
-        coursesList.innerHTML = courses.map(course => {
-            let gradeDisplay, pointsDisplay;
-            if (course.isUngraded) {
-                gradeDisplay = course.grade;
-                pointsDisplay = 'N/A';
-            } else {
-                gradeDisplay = course.grade.toFixed(1);
-                pointsDisplay = (course.credits * course.grade).toFixed(2);
-            }
-            
-            return `
-                <div class="course-item">
-                    <div class="course-info">
-                        <div class="course-name">${course.name}</div>
-                        <div class="course-details">
-                            Credits: ${course.credits} | Grade: ${gradeDisplay} | Points: ${pointsDisplay}
-                        </div>
-                    </div>
-                    <button class="btn-remove" onclick="removeCourse(${course.id})">Remove</button>
-                </div>
-            `;
-        }).join('');
-    }
-
-    calculateCurrentGPA();
-}
-
-function calculateCurrentGPA() {
-    if (courses.length === 0) {
-        document.getElementById('currentGPA').textContent = '0.00';
-        document.getElementById('totalCredits').textContent = '0';
-        return;
-    }
-
-    const totalCredits = courses.reduce((sum, course) => sum + course.credits, 0);
-    
-    const gradedCourses = courses.filter(course => !course.isUngraded);
-    const gradedCredits = gradedCourses.reduce((sum, course) => sum + course.credits, 0);
-    const totalPoints = gradedCourses.reduce((sum, course) => sum + (course.credits * course.grade), 0);
-    
-    const gpa = gradedCredits > 0 ? totalPoints / gradedCredits : 0;
-
-    document.getElementById('currentGPA').textContent = gpa.toFixed(2);
-    document.getElementById('totalCredits').textContent = totalCredits.toFixed(1);
-}
-
-function calculateCGPA() {
-    const prevGPA = parseFloat(document.getElementById('prevGPA').value);
-    const prevCredits = parseFloat(document.getElementById('prevCredits').value);
-
-    if (isNaN(prevGPA) || isNaN(prevCredits) || prevGPA < 0 || prevGPA > 4 || prevCredits < 0) {
-        alert('Please enter valid previous CGPA (0-4) and credits');
-        return;
-    }
-
-    const gradedCourses = courses.filter(course => !course.isUngraded);
-    const currentGradedCredits = gradedCourses.reduce((sum, course) => sum + course.credits, 0);
-    const currentPoints = gradedCourses.reduce((sum, course) => sum + (course.credits * course.grade), 0);
-    
-    const totalGradedCredits = prevCredits + currentGradedCredits;
-    const totalPoints = (prevGPA * prevCredits) + currentPoints;
-    const cgpa = totalGradedCredits > 0 ? totalPoints / totalGradedCredits : 0;
-    
-    const allCurrentCredits = courses.reduce((sum, course) => sum + course.credits, 0);
-    const totalAllCredits = prevCredits + allCurrentCredits;
-
-    document.getElementById('cgpaDisplay').textContent = cgpa.toFixed(2);
-    document.getElementById('cgpaCredits').textContent = totalAllCredits.toFixed(1);
-    document.getElementById('cgpaResult').style.display = 'block';
-}
-
-function clearInputs() {
-    document.getElementById('courseName').value = '';
-    document.getElementById('credits').value = '';
-    document.getElementById('grade').value = '';
-}
-
-function clearAll() {
-    if (courses.length === 0 && !document.getElementById('prevGPA').value && !document.getElementById('prevCredits').value) {
-        return;
-    }
-
-    if (confirm('Are you sure you want to clear all data?')) {
-        courses = [];
-        updateDisplay();
-        document.getElementById('prevGPA').value = '';
-        document.getElementById('prevCredits').value = '';
-        document.getElementById('cgpaResult').style.display = 'none';
-    }
-}
-
-updateDisplay();
+  resultDiv.innerHTML = `
+    <h2>🎯 GPA: ${GPA.toFixed(2)}</h2>
+    <h2>🏆 CGPA: ${CGPA.toFixed(2)}</h2>
+    <p>${message}</p>
+  `;
+  resultDiv.classList.remove("hidden");
+});
