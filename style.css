@@ -125,3 +125,43 @@ footer {
     width: 90%;
   }
 }
+/* Fix layout for smaller screens */
+@media (max-width: 600px) {
+  main {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .previous-semester {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .previous-semester label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+
+  .previous-semester input {
+    width: 90%;
+    max-width: 300px;
+    margin-top: 5px;
+  }
+
+  .previous-semester button {
+    width: 90%;
+    max-width: 200px;
+    margin-top: 15px;
+  }
+
+  input, select, button {
+    font-size: 0.95em;
+  }
+
+  h1, h2 {
+    font-size: 1.4em;
+  }
+}
+
