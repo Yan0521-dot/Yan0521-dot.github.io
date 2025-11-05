@@ -65,10 +65,10 @@ calculateBtn.addEventListener("click", () => {
   const CGPA = (prevCGPA * prevCredits + GPA * totalCredits) / (prevCredits + totalCredits || 1);
 
   let message = "";
-  if (GPA >= 3.7) message = "🔥 Outstanding! You’re on fire!";
-  else if (GPA >= 3.0) message = "💪 Great job! Keep pushing forward!";
-  else if (GPA >= 2.0) message = "📈 You’re doing fine. A bit more effort and you’ll shine!";
-  else message = "🌱 Don’t give up. Every semester is a new chance to rise!";
+  if (GPA >= 3.7) message = "🔥 Dean’s List potential! Keep it up!";
+  else if (GPA >= 3.0) message = "💪 Strong performance — you’re doing great!";
+  else if (GPA >= 2.0) message = "📈 Keep grinding, you’ll reach higher!";
+  else message = "🌱 Don’t stop. Every semester is a fresh start.";
 
   resultDiv.innerHTML = `
     <h2>🎯 GPA: ${GPA.toFixed(2)}</h2>
@@ -77,4 +77,3 @@ calculateBtn.addEventListener("click", () => {
   `;
   resultDiv.classList.remove("hidden");
 });
-
