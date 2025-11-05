@@ -26,17 +26,23 @@
 
       <div class="previous-info">
         <h3>Previous Semester Info</h3>
-        <label>Total previous credits:</label>
-        <input type="number" id="prevCredits" step="0.01" />
-        <label>Previous CGPA:</label>
-        <input type="number" id="prevCGPA" step="0.01" />
+        <div class="info-grid">
+          <div>
+            <label>Total previous credits:</label>
+            <input type="number" id="prevCredits" step="0.01" />
+          </div>
+          <div>
+            <label>Previous CGPA:</label>
+            <input type="number" id="prevCGPA" step="0.01" />
+          </div>
+        </div>
       </div>
 
       <button id="calculate">Calculate GPA & CGPA</button>
       <div id="results"></div>
     </section>
 
-    <section class="graph">
+    <section class="graph" id="graphSection" style="display: none;">
       <h2>📊 Track Your Progress</h2>
       <canvas id="progressChart"></canvas>
       <div class="graph-buttons">
