@@ -3,12 +3,22 @@ document.getElementById("generateFields").addEventListener("click", function () 
   const container = document.getElementById("subjectsContainer");
   container.innerHTML = "";
 
+  if (!numSubjects || numSubjects < 1) {
+    container.innerHTML = "<p>Please enter a valid number of subjects.</p>";
+    return;
+  }
+
   for (let i = 1; i <= numSubjects; i++) {
     container.innerHTML += `
       <div class="subject">
         <h4>Subject ${i}</h4>
-        Credit hours: <input type="number" id="credit${i}" step="0.01" min="0" />
-        Grade:
+        <label>Subject Name:</label>
+        <input type="text" id="subjectName${i}" placeholder="e.g., Data Science 101" />
+
+        <label>Credit Hours:</label>
+        <input type="number" id="credit${i}" step="0.01" min="0" />
+
+        <label>Grade:</label>
         <select id="grade${i}">
           <option value="A+">A+</option>
           <option value="A">A</option>
@@ -62,6 +72,9 @@ document.getElementById("calculate").addEventListener("click", function () {
     <p>🏆 CGPA: <b>${newCGPA.toFixed(2)}</b></p>
   `;
 
+  // Show graph after first calculation
+  document.getElementById("graphSection").style.display = "block";
+
   // Auto-track progress
   const sem = semesterLabels.length + 1;
   semesterLabels.push(`Sem ${sem}`);
@@ -90,23 +103,16 @@ function updateChart() {
         {
           label: "CGPA",
           data: cgpaData,
-          borderColor: "#8e44ad",
+          borderColor: "#9c27b0",
           fill: false,
           tension: 0.3
         }
       ]
     },
     options: {
-      animation: {
-        duration: 1500,
-        easing: 'easeInOutQuart'
-      },
-      scales: {
-        y: { beginAtZero: true, max: 4 }
-      },
-      plugins: {
-        legend: { labels: { color: "#fff" } }
-      }
+      animation: { duration: 1500, easing: "easeInOutQuart" },
+      scales: { y: { beginAtZero: true, max: 4 } },
+      plugins: { legend: { labels: { color: "#fff" } } }
     }
   });
 }
@@ -135,6 +141,7 @@ window.onload = () => {
     cgpaData = JSON.parse(localStorage.getItem("cgpaData"));
     semesterLabels = JSON.parse(localStorage.getItem("semesterLabels"));
     updateChart();
+    document.getElementById("graphSection").style.display = "block";
   }
 };
 
