@@ -4,6 +4,20 @@ const subjectsContainer = document.getElementById("subjects-container");
 const resultDiv = document.getElementById("result");
 const cgpaSection = document.getElementById("cgpa-section");
 
+const gradePoints = {
+  "A+": 4.0,
+  "A": 4.0,
+  "A-": 3.7,
+  "B+": 3.3,
+  "B": 3.0,
+  "B-": 2.7,
+  "C+": 2.3,
+  "C": 2.0,
+  "C-": 1.7,
+  "D": 1.3,
+  "F": 0.0
+};
+
 generateBtn.addEventListener("click", () => {
   const numSubjects = parseInt(document.getElementById("subjects").value);
   subjectsContainer.innerHTML = "";
@@ -15,10 +29,17 @@ generateBtn.addEventListener("click", () => {
 
   for (let i = 1; i <= numSubjects; i++) {
     const div = document.createElement("div");
+    div.classList.add("subject-card");
     div.innerHTML = `
-      <h3>Subject ${i}</h3>
+      <h3>📘 Subject ${i}</h3>
+      <input type="text" placeholder="Subject Name" id="name${i}" />
       <input type="number" placeholder="Credit Hours" id="credit${i}" min="1" />
-      <input type="number" placeholder="Grade Point (e.g. 4.0)" step="0.01" id="grade${i}" />
+      <select id="grade${i}">
+        <option value="">Select Grade</option>
+        ${Object.keys(gradePoints)
+          .map(grade => `<option value="${grade}">${grade}</option>`)
+          .join("")}
+      </select>
     `;
     subjectsContainer.appendChild(div);
   }
@@ -34,7 +55,7 @@ calculateBtn.addEventListener("click", () => {
 
   for (let i = 1; i <= numSubjects; i++) {
     const credit = parseFloat(document.getElementById(`credit${i}`).value);
-    const grade = parseFloat(document.getElementById(`grade${i}`).value);
+    const grade = document.getElementById(`grade${i}`).value;
 
     if (!credit || !grade) {
       alert(`Please fill all fields for Subject ${i}`);
@@ -42,7 +63,7 @@ calculateBtn.addEventListener("click", () => {
     }
 
     totalCredits += credit;
-    totalGradePoints += credit * grade;
+    totalGradePoints += credit * gradePoints[grade];
   }
 
   const GPA = totalGradePoints / totalCredits;
@@ -52,10 +73,10 @@ calculateBtn.addEventListener("click", () => {
   const CGPA = (prevCGPA * prevCredits + GPA * totalCredits) / (prevCredits + totalCredits || 1);
 
   let message = "";
-  if (GPA >= 3.7) message = "🔥 Outstanding! You’re on fire!";
-  else if (GPA >= 3.0) message = "💪 Great job! Keep pushing forward!";
-  else if (GPA >= 2.0) message = "📈 You’re doing fine. A bit more effort and you’ll shine!";
-  else message = "🌱 Don’t give up. Every semester is a new chance to rise!";
+  if (GPA >= 3.7) message = "🔥 Outstanding! You’re dominating!";
+  else if (GPA >= 3.0) message = "💪 Solid work! Keep up the grind!";
+  else if (GPA >= 2.0) message = "📈 You’re improving, stay consistent!";
+  else message = "🌱 Don’t give up — every semester is a comeback chance!";
 
   resultDiv.innerHTML = `
     <h2>🎯 GPA: ${GPA.toFixed(2)}</h2>
