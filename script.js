@@ -1,154 +1,128 @@
-document.getElementById("generateFields").addEventListener("click", function () {
-  const numSubjects = parseInt(document.getElementById("numSubjects").value);
-  const container = document.getElementById("subjectsContainer");
-  container.innerHTML = "";
-
-  if (!numSubjects || numSubjects < 1) {
-    container.innerHTML = "<p>Please enter a valid number of subjects.</p>";
-    return;
-  }
-
-  for (let i = 1; i <= numSubjects; i++) {
-    container.innerHTML += `
-      <div class="subject">
-        <h4>Subject ${i}</h4>
-        <label>Subject Name:</label>
-        <input type="text" id="subjectName${i}" placeholder="e.g., Data Science 101" />
-
-        <label>Credit Hours:</label>
-        <input type="number" id="credit${i}" step="0.01" min="0" />
-
-        <label>Grade:</label>
-        <select id="grade${i}">
-          <option value="A+">A+</option>
-          <option value="A">A</option>
-          <option value="A-">A-</option>
-          <option value="B+">B+</option>
-          <option value="B">B</option>
-          <option value="B-">B-</option>
-          <option value="C+">C+</option>
-          <option value="C">C</option>
-          <option value="D">D</option>
-          <option value="F">F</option>
-          <option value="S">S (Satisfactory)</option>
-          <option value="US">US (Unsatisfactory)</option>
-        </select>
-      </div>
-    `;
-  }
-});
-
-const gradePoints = {
-  "A+": 4.0, "A": 4.0, "A-": 3.7,
-  "B+": 3.3, "B": 3.0, "B-": 2.7,
-  "C+": 2.3, "C": 2.0, "D": 1.0, "F": 0.0
-};
-
-let gpaData = [];
-let cgpaData = [];
-let semesterLabels = [];
+const generateFieldsBtn = document.getElementById("generateFields");
+const subjectsContainer = document.getElementById("subjectsContainer");
+const gpaForm = document.getElementById("gpaForm");
+const calculateBtn = document.getElementById("calculateBtn");
+const resultDiv = document.getElementById("result");
+const chartSection = document.getElementById("chartSection");
 let chart;
 
-document.getElementById("calculate").addEventListener("click", function () {
-  const numSubjects = parseInt(document.getElementById("numSubjects").value);
-  let totalPoints = 0, totalCredits = 0;
+generateFieldsBtn.addEventListener("click", () => {
+  const numSubjects = document.getElementById("numSubjects").value;
+  if (numSubjects <= 0) return alert("Enter a valid number of subjects!");
+
+  subjectsContainer.innerHTML = "";
+  gpaForm.style.display = "block";
 
   for (let i = 1; i <= numSubjects; i++) {
-    const credit = parseFloat(document.getElementById(`credit${i}`).value);
-    const grade = document.getElementById(`grade${i}`).value;
-    if (grade === "S" || grade === "US") continue;
+    const div = document.createElement("div");
+    div.classList.add("subject-row");
 
-    totalCredits += credit;
-    totalPoints += credit * (gradePoints[grade] || 0);
+    div.innerHTML = `
+      <input type="text" placeholder="Subject ${i} name" required>
+      <select class="grade">
+        <option value="4">A</option>
+        <option value="3.7">A-</option>
+        <option value="3.3">B+</option>
+        <option value="3">B</option>
+        <option value="2.7">B-</option>
+        <option value="2.3">C+</option>
+        <option value="2">C</option>
+        <option value="1.7">C-</option>
+        <option value="1.3">D+</option>
+        <option value="1">D</option>
+        <option value="0">F</option>
+        <option value="0">US</option>
+        <option value="4">S</option>
+      </select>
+      <input type="number" class="credit" placeholder="Credit Hours" min="1" required>
+    `;
+    subjectsContainer.appendChild(div);
   }
-
-  const gpa = totalPoints / totalCredits;
-  const prevCredits = parseFloat(document.getElementById("prevCredits").value) || 0;
-  const prevCGPA = parseFloat(document.getElementById("prevCGPA").value) || 0;
-  const newCGPA = ((prevCGPA * prevCredits) + (gpa * totalCredits)) / (prevCredits + totalCredits);
-
-  document.getElementById("results").innerHTML = `
-    <p>🎯 GPA: <b>${gpa.toFixed(2)}</b></p>
-    <p>🏆 CGPA: <b>${newCGPA.toFixed(2)}</b></p>
-  `;
-
-  // Show graph after first calculation
-  document.getElementById("graphSection").style.display = "block";
-
-  // Auto-track progress
-  const sem = semesterLabels.length + 1;
-  semesterLabels.push(`Sem ${sem}`);
-  gpaData.push(parseFloat(gpa.toFixed(2)));
-  cgpaData.push(parseFloat(newCGPA.toFixed(2)));
-
-  updateChart();
-  motivateUser(newCGPA);
 });
 
-function updateChart() {
-  const ctx = document.getElementById("progressChart").getContext("2d");
+calculateBtn.addEventListener("click", () => {
+  const grades = document.querySelectorAll(".grade");
+  const credits = document.querySelectorAll(".credit");
+
+  let totalPoints = 0, totalCredits = 0;
+
+  grades.forEach((grade, i) => {
+    const g = parseFloat(grade.value);
+    const c = parseFloat(credits[i].value);
+    totalPoints += g * c;
+    totalCredits += c;
+  });
+
+  const gpa = totalPoints / totalCredits;
+
+  const prevCredits = parseFloat(document.getElementById("prevCredits").value) || 0;
+  const prevCgpa = parseFloat(document.getElementById("prevCgpa").value) || 0;
+
+  const newCgpa = ((prevCgpa * prevCredits) + (gpa * totalCredits)) / (prevCredits + totalCredits);
+
+  resultDiv.innerHTML = `
+    <p><b>Semester GPA:</b> ${gpa.toFixed(2)}</p>
+    <p><b>Overall CGPA:</b> ${newCgpa.toFixed(2)}</p>
+  `;
+
+  chartSection.classList.remove("hidden");
+  updateChart(gpa.toFixed(2), newCgpa.toFixed(2));
+});
+
+function updateChart(gpa, cgpa) {
+  const ctx = document.getElementById("progressChart");
   if (chart) chart.destroy();
+
   chart = new Chart(ctx, {
     type: "line",
     data: {
-      labels: semesterLabels,
+      labels: ["This Semester", "Overall"],
       datasets: [
         {
           label: "GPA",
-          data: gpaData,
-          borderColor: "#00bcd4",
+          data: [0, 0],
+          borderColor: "#58a6ff",
+          tension: 0.4,
           fill: false,
-          tension: 0.3
+          borderWidth: 3,
+          pointRadius: 5
         },
         {
           label: "CGPA",
-          data: cgpaData,
-          borderColor: "#9c27b0",
+          data: [0, 0],
+          borderColor: "#2ea043",
+          tension: 0.4,
           fill: false,
-          tension: 0.3
+          borderWidth: 3,
+          pointRadius: 5
         }
       ]
     },
     options: {
-      animation: { duration: 1500, easing: "easeInOutQuart" },
+      responsive: true,
       scales: { y: { beginAtZero: true, max: 4 } },
-      plugins: { legend: { labels: { color: "#fff" } } }
+      animation: {
+        duration: 1500,
+        easing: "easeOutQuart",
+        onProgress: function(animation) {
+          const progress = animation.currentStep / animation.numSteps;
+          chart.data.datasets[0].data = [0, gpa * progress];
+          chart.data.datasets[1].data = [0, cgpa * progress];
+          chart.update("none");
+        }
+      }
     }
   });
 }
 
-document.getElementById("saveProgress").addEventListener("click", () => {
-  localStorage.setItem("gpaData", JSON.stringify(gpaData));
-  localStorage.setItem("cgpaData", JSON.stringify(cgpaData));
-  localStorage.setItem("semesterLabels", JSON.stringify(semesterLabels));
-  alert("Progress saved ✅");
+document.getElementById("saveChart").addEventListener("click", () => {
+  alert("Chart saved! Data will remain visible for this session ✅");
 });
 
-document.getElementById("resetProgress").addEventListener("click", () => {
-  if (confirm("Reset all progress?")) {
-    gpaData = [];
-    cgpaData = [];
-    semesterLabels = [];
-    localStorage.clear();
-    updateChart();
-    document.getElementById("motivation").innerText = "";
+document.getElementById("resetChart").addEventListener("click", () => {
+  if (confirm("Reset chart and data?")) {
+    chart.destroy();
+    chartSection.classList.add("hidden");
+    resultDiv.innerHTML = "";
   }
 });
-
-window.onload = () => {
-  if (localStorage.getItem("gpaData")) {
-    gpaData = JSON.parse(localStorage.getItem("gpaData"));
-    cgpaData = JSON.parse(localStorage.getItem("cgpaData"));
-    semesterLabels = JSON.parse(localStorage.getItem("semesterLabels"));
-    updateChart();
-    document.getElementById("graphSection").style.display = "block";
-  }
-};
-
-function motivateUser(cgpa) {
-  const msg = document.getElementById("motivation");
-  if (cgpa >= 3.8) msg.innerText = "🔥 You’re a Dean’s List material! Keep that fire burning!";
-  else if (cgpa >= 3.5) msg.innerText = "💪 You’re doing great! Stay consistent.";
-  else if (cgpa >= 3.0) msg.innerText = "⚡ Good progress! Aim for the next level.";
-  else msg.innerText = "🌱 Keep going — progress takes time!";
-}
