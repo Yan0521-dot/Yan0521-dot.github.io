@@ -1,61 +1,64 @@
-<* {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, #1f1c2c, #928dab);
+  background: radial-gradient(circle at top left, #141e30, #243b55);
   color: #fff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  animation: fadeIn 1s ease-in-out;
 }
 
 .container {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
   width: 90%;
   max-width: 600px;
   text-align: center;
+  backdrop-filter: blur(12px);
 }
 
 h1 {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   margin-bottom: 10px;
 }
 
 .tagline {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   opacity: 0.9;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
-label {
-  display: block;
-  margin: 10px 0 5px;
-}
-
-input {
-  padding: 8px 10px;
-  width: 80%;
+input, select {
+  padding: 10px;
+  width: 85%;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   outline: none;
-  margin-bottom: 10px;
+  margin: 8px 0;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+select {
+  cursor: pointer;
 }
 
 button {
-  background: #ffcc70;
+  background: #ffb703;
   color: #222;
   border: none;
-  padding: 10px 15px;
-  border-radius: 10px;
+  padding: 10px 20px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s;
@@ -67,20 +70,32 @@ button:hover {
   transform: scale(1.05);
 }
 
+.subject-card {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 15px;
+  padding: 15px;
+  margin: 10px 0;
+  transition: transform 0.2s ease;
+}
+
+.subject-card:hover {
+  transform: scale(1.02);
+}
+
 .hidden {
   display: none;
 }
 
 #result {
   margin-top: 25px;
-  padding: 15px;
+  padding: 20px;
   background: rgba(255,255,255,0.15);
   border-radius: 10px;
   animation: fadeIn 0.8s ease-in-out;
 }
 
 footer {
-  margin-top: 20px;
+  margin-top: 25px;
   font-size: 0.8rem;
   opacity: 0.7;
 }
@@ -89,4 +104,3 @@ footer {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
