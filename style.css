@@ -25,7 +25,7 @@ h1 {
 }
 
 main {
-  max-width: 800px;
+  max-width: 850px;
   margin: 40px auto;
   padding: 20px;
   background: #111;
@@ -35,6 +35,14 @@ main {
 
 .calculator, .graph {
   margin-bottom: 40px;
+}
+
+.subject {
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 10px;
+  margin: 10px 0;
+  background: #1a1a1a;
 }
 
 input, select, button {
@@ -48,6 +56,7 @@ input, select, button {
 input, select {
   background: #222;
   color: white;
+  width: 180px;
 }
 
 button {
@@ -61,6 +70,13 @@ button {
 button:hover {
   background: #0097a7;
   color: white;
+}
+
+.info-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .graph-buttons {
@@ -80,4 +96,15 @@ footer {
   color: #00ffcc;
   font-weight: bold;
   font-size: 1.1em;
+}
+
+/* 📱 Mobile Friendly */
+@media (max-width: 600px) {
+  input, select {
+    width: 100%;
+  }
+  .info-grid {
+    flex-direction: column;
+    align-items: center;
+  }
 }
