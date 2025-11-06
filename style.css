@@ -1,106 +1,140 @@
+/* === GENERAL LAYOUT === */
 body {
-  font-family: "Poppins", sans-serif;
-  background-color: #0d0d0d;
-  color: #fff;
-  text-align: center;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #fff;
+  color: #111;
+  text-align: center;
 }
 
+/* === HEADER === */
 header {
-  background-color: #111;
-  padding: 15px;
+  background-color: #b90000; /* UniRazak red */
+  color: white;
+  padding: 15px 10px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border-bottom: 2px solid #b30000;
 }
 
-.logo {
-  width: 60px;
-  height: auto;
-}
-
-h1 {
-  color: #b30000;
+header h1 {
+  font-size: 1.3rem;
+  margin: 0;
   font-weight: 700;
 }
 
-button {
-  background-color: #b30000;
-  color: #fff;
+/* === LOGO === */
+#logo {
+  width: 60px;
+  height: auto;
+  margin-right: 10px;
+}
+
+/* === MENU BUTTON === */
+.menu-btn {
+  background: none;
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  margin: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-button:hover {
-  background-color: #e60000;
-}
-
-input, select {
-  padding: 8px;
-  margin: 5px;
-  border-radius: 5px;
-  border: 1px solid #b30000;
-  background-color: #1a1a1a;
   color: white;
-}
-
-footer {
-  background-color: #111;
-  padding: 15px;
-  font-size: 14px;
-  border-top: 1px solid #b30000;
-  color: #ccc;
+  font-size: 1.8rem;
+  cursor: pointer;
 }
 
 .menu {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-}
-
-.hamburger {
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.menu-content {
   display: none;
-  flex-direction: column;
-  position: absolute;
-  top: 35px;
-  background: #222;
+  background-color: #222;
+  padding: 10px;
+  text-align: left;
+}
+
+.menu.show {
+  display: block;
+}
+
+.menu a {
+  display: block;
+  color: white;
+  padding: 8px 0;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  color: #ff3b3b;
+}
+
+/* === MAIN CONTENT === */
+.container {
+  padding: 20px;
+}
+
+h2 {
+  color: #b90000;
+  margin-bottom: 10px;
+}
+
+/* === INPUTS AND BUTTONS === */
+input, select {
+  padding: 8px;
+  width: 60%;
+  max-width: 300px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  background-color: #b90000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #900000;
+}
+
+/* === MOTIVATION TEXT === */
+.motivation {
+  font-style: italic;
+  margin-top: 15px;
+  color: #555;
+}
+
+/* === LEADERBOARD === */
+#leaderboard {
+  margin-top: 20px;
+  background-color: #f9f9f9;
   border-radius: 8px;
   padding: 10px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
 }
 
-.menu-content button {
-  margin: 5px 0;
+#leaderboard h3 {
+  color: #b90000;
+  font-weight: 700;
 }
 
-.menu-content.show {
-  display: flex;
-}
-
-.chart-buttons {
-  margin-top: 10px;
-}
-
-#leaderboard {
-  list-style: none;
+#leaderboard ul {
+  list-style-type: none;
   padding: 0;
 }
 
 #leaderboard li {
-  background-color: #1a1a1a;
-  border: 1px solid #b30000;
-  border-radius: 8px;
-  margin: 5px;
+  margin: 6px 0;
+  font-weight: 500;
+}
+
+/* === FOOTER === */
+footer {
+  margin-top: 40px;
   padding: 10px;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+footer strong {
+  color: #b90000;
 }
