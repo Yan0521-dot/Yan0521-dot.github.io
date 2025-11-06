@@ -1,68 +1,55 @@
-// ===== FIREBASE SETUP =====
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-// Your Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
-  authDomain: "cgpa-calculator-ur.firebaseapp.com",
-  projectId: "cgpa-calculator-ur",
-  storageBucket: "cgpa-calculator-ur.firebasestorage.app",
-  messagingSenderId: "345716541673",
-  appId: "1:345716541673:web:0633637368fb0156d98878",
-  measurementId: "G-277D7RMJLH"
-};
+const db = window.db;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// ===== DOM ELEMENTS =====
 const nameSection = document.getElementById("name-section");
 const cgpaSection = document.getElementById("cgpa-section");
-const saveNameBtn = document.getElementById("save-name");
 const usernameInput = document.getElementById("username");
+const saveNameBtn = document.getElementById("save-name");
 const addSubjectsBtn = document.getElementById("addSubjects");
-const subjectsDiv = document.getElementById("subjects");
 const calculateBtn = document.getElementById("calculateBtn");
+const subjectsDiv = document.getElementById("subjects");
 const resultDiv = document.getElementById("result");
 const gpaSpan = document.getElementById("gpa");
 const cgpaSpan = document.getElementById("cgpa");
 const saveProgressBtn = document.getElementById("saveProgress");
+const leaderboardSection = document.getElementById("leaderboard-section");
+const leaderboardList = document.getElementById("leaderboard");
 const leaderboardBtn = document.getElementById("leaderboard-btn");
-const leaderboardDiv = document.getElementById("leaderboard");
+const menuBtn = document.getElementById("menu-btn");
+const menu = document.getElementById("menu");
+const chartCanvas = document.getElementById("progressChart");
 
+let chart = null;
 let userName = localStorage.getItem("username");
 
-// ===== SAVE USERNAME =====
+if (userName) {
+  nameSection.classList.add("hidden");
+  cgpaSection.classList.remove("hidden");
+}
+
 saveNameBtn.addEventListener("click", () => {
   const name = usernameInput.value.trim();
-  if (name === "") {
-    alert("Please enter your name first!");
-    return;
-  }
+  if (!name) return alert("Please enter your name.");
   localStorage.setItem("username", name);
   userName = name;
   nameSection.classList.add("hidden");
   cgpaSection.classList.remove("hidden");
 });
 
-// ===== ADD SUBJECT INPUT FIELDS =====
+menuBtn.addEventListener("click", () => menu.classList.toggle("hidden"));
+
 addSubjectsBtn.addEventListener("click", () => {
   const numSubjects = parseInt(document.getElementById("numSubjects").value);
   subjectsDiv.innerHTML = "";
-
-  if (!numSubjects || numSubjects <= 0) {
-    alert("Enter a valid number of subjects!");
-    return;
-  }
+  if (!numSubjects || numSubjects < 1) return alert("Enter valid subject count");
 
   for (let i = 1; i <= numSubjects; i++) {
     const div = document.createElement("div");
     div.innerHTML = `
       <h4>Subject ${i}</h4>
-      <input type="text" placeholder="Subject Name" id="subject${i}">
-      <input type="number" placeholder="Credit Hours" id="credit${i}" min="1">
+      <input type="text" id="subject${i}" placeholder="Name" />
+      <input type="number" id="credit${i}" placeholder="Credit Hours" min="1" />
       <select id="grade${i}">
         <option value="4.00">A+</option>
         <option value="4.00">A</option>
@@ -76,6 +63,8 @@ addSubjectsBtn.addEventListener("click", () => {
         <option value="1.33">D+</option>
         <option value="1.00">D</option>
         <option value="0.00">F</option>
+        <option value="S">S (Ungraded)</option>
+        <option value="US">US (Ungraded)</option>
       </select>
     `;
     subjectsDiv.appendChild(div);
@@ -84,61 +73,80 @@ addSubjectsBtn.addEventListener("click", () => {
   calculateBtn.classList.remove("hidden");
 });
 
-// ===== CALCULATE GPA + CGPA =====
-calculateBtn.addEventListener("click", async () => {
+calculateBtn.addEventListener("click", () => {
   const numSubjects = parseInt(document.getElementById("numSubjects").value);
   let totalCredits = 0;
   let totalPoints = 0;
 
   for (let i = 1; i <= numSubjects; i++) {
     const credit = parseFloat(document.getElementById(`credit${i}`).value);
-    const grade = parseFloat(document.getElementById(`grade${i}`).value);
+    const grade = document.getElementById(`grade${i}`).value;
 
-    if (!credit || isNaN(grade)) {
-      alert(`Please fill all fields for Subject ${i}`);
-      return;
+    if (grade !== "S" && grade !== "US") {
+      totalCredits += credit;
+      totalPoints += credit * parseFloat(grade);
     }
-
-    totalCredits += credit;
-    totalPoints += credit * grade;
   }
 
-  const gpa = totalPoints / totalCredits;
-  const cgpa = gpa; // You can later modify to include previous CGPA
+  const GPA = totalPoints / totalCredits;
+  const CGPA = GPA; // simplified unless you add previous term data
 
-  gpaSpan.textContent = gpa.toFixed(2);
-  cgpaSpan.textContent = cgpa.toFixed(2);
+  gpaSpan.textContent = GPA.toFixed(2);
+  cgpaSpan.textContent = CGPA.toFixed(2);
   resultDiv.classList.remove("hidden");
 
-  // Save to Firestore
-  document.getElementById("saveProgress").addEventListener("click", async () => {
-    try {
-      await addDoc(collection(db, "leaderboard"), {
-        name: userName,
-        gpa: gpa.toFixed(2),
-        cgpa: cgpa.toFixed(2),
-        timestamp: new Date().toISOString(),
-      });
-      alert("✅ Progress saved successfully!");
-    } catch (err) {
-      console.error("Error saving data:", err);
-      alert("❌ Failed to save progress.");
+  if (chart) chart.destroy();
+  const ctx = chartCanvas.getContext("2d");
+  chartCanvas.classList.remove("hidden");
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: ["GPA", "CGPA"],
+      datasets: [{
+        label: "Progress",
+        data: [GPA, CGPA],
+        borderColor: "#c70039",
+        borderWidth: 3,
+        tension: 0.4
+      }]
+    },
+    options: {
+      animations: { tension: { duration: 2000, easing: "easeInOutBounce", from: 0.1, to: 0.4, loop: false } },
+      scales: { y: { beginAtZero: true, max: 4 } }
     }
   });
+
+  saveProgressBtn.onclick = async () => {
+    const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
+    const snapshot = await getDocs(q);
+    let leaderboard = snapshot.docs.map(d => d.data());
+    const minCgpa = leaderboard.length < 10 ? 0 : Math.min(...leaderboard.map(x => parseFloat(x.cgpa)));
+
+    if (CGPA > minCgpa) {
+      await addDoc(collection(db, "leaderboard"), {
+        name: userName,
+        gpa: GPA.toFixed(2),
+        cgpa: CGPA.toFixed(2),
+        timestamp: new Date().toISOString()
+      });
+      alert("Progress saved! You made it to the leaderboard 🏆");
+    } else {
+      alert("Your CGPA isn’t in the top 10 yet. Keep improving 💪");
+    }
+  };
 });
 
-// ===== LEADERBOARD =====
 leaderboardBtn.addEventListener("click", async () => {
-  leaderboardDiv.innerHTML = "<h3>🏆 Top 10 Leaderboard</h3>";
+  leaderboardSection.classList.toggle("hidden");
+  leaderboardList.innerHTML = "";
   const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
   const snapshot = await getDocs(q);
 
-  snapshot.forEach((doc) => {
+  snapshot.forEach(doc => {
     const data = doc.data();
-    leaderboardDiv.innerHTML += `
-      <p>👤 ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}</p>
-    `;
+    const li = document.createElement("li");
+    li.textContent = `${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}`;
+    leaderboardList.appendChild(li);
   });
-
-  leaderboardDiv.classList.toggle("hidden");
 });
