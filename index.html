@@ -37,11 +37,6 @@
 
       <canvas id="progressChart" class="hidden"></canvas>
     </div>
-
-    <div id="leaderboard-section" class="card hidden">
-      <h2>🏆 Leaderboard (Top 10)</h2>
-      <ol id="leaderboard"></ol>
-    </div>
   </div>
 
   <!-- Firebase -->
@@ -61,7 +56,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    window.db = db; // Make db accessible from script.js
+    window.db = db; // make db available for script.js
   </script>
 
   <script type="module" src="script.js"></script>
