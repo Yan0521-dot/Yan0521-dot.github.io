@@ -1,116 +1,121 @@
-import { collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import Chart from "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js";
+import { collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-export function setupApp(db) {
-  const numSubjectsInput = document.getElementById("numSubjects");
-  const generateBtn = document.getElementById("generateBtn");
-  const subjectsContainer = document.getElementById("subjectsContainer");
-  const calcBtn = document.getElementById("calculateBtn");
-  const results = document.getElementById("results");
-  const leaderboardList = document.getElementById("leaderboardList");
+const db = window.db;
+let username = localStorage.getItem("username") || "";
 
-  const calcSection = document.getElementById("calculatorSection");
-  const leaderboardSection = document.getElementById("leaderboardSection");
+const nameSection = document.getElementById("name-section");
+const cgpaSection = document.getElementById("cgpa-section");
+const leaderboardSection = document.getElementById("leaderboard-section");
+const saveNameBtn = document.getElementById("save-name");
 
-  const calcBtnMenu = document.getElementById("calcBtn");
-  const leaderboardBtn = document.getElementById("leaderboardBtn");
+if (username) {
+  nameSection.classList.add("hidden");
+  cgpaSection.classList.remove("hidden");
+  loadLeaderboard();
+}
 
-  let chart = null;
+saveNameBtn.addEventListener("click", () => {
+  const nameInput = document.getElementById("username").value.trim();
+  if (!nameInput) return alert("Enter your name first!");
+  username = nameInput;
+  localStorage.setItem("username", username);
+  nameSection.classList.add("hidden");
+  cgpaSection.classList.remove("hidden");
+});
 
-  calcBtnMenu.addEventListener("click", () => {
-    calcSection.style.display = "block";
-    leaderboardSection.style.display = "none";
-  });
+document.getElementById("addSubjects").addEventListener("click", () => {
+  const numSubjects = parseInt(document.getElementById("numSubjects").value);
+  const subjectsDiv = document.getElementById("subjects");
+  subjectsDiv.innerHTML = "";
 
-  leaderboardBtn.addEventListener("click", async () => {
-    calcSection.style.display = "none";
-    leaderboardSection.style.display = "block";
-    loadLeaderboard();
-  });
-
-  generateBtn.addEventListener("click", () => {
-    subjectsContainer.innerHTML = "";
-    const num = parseInt(numSubjectsInput.value);
-    for (let i = 1; i <= num; i++) {
-      subjectsContainer.innerHTML += `
-        <div>
-          <input type="text" placeholder="Subject ${i} name" id="subName${i}" />
-          <input type="number" placeholder="Credit Hour" id="credit${i}" />
-          <input type="text" placeholder="Grade (A, B+, C...)" id="grade${i}" />
-        </div>`;
-    }
-  });
-
-  calcBtn.addEventListener("click", async () => {
-    const num = parseInt(numSubjectsInput.value);
-    const prevCredits = parseFloat(document.getElementById("prevCredits").value);
-    const prevCgpa = parseFloat(document.getElementById("prevCgpa").value);
-
-    const grades = {
-      A: 4.0, "A-": 3.7, "B+": 3.3, B: 3.0, "B-": 2.7,
-      "C+": 2.3, C: 2.0, "C-": 1.7, D: 1.3, F: 0
-    };
-
-    let totalPoints = 0, totalCredits = 0;
-
-    for (let i = 1; i <= num; i++) {
-      const credit = parseFloat(document.getElementById(`credit${i}`).value);
-      const grade = document.getElementById(`grade${i}`).value.toUpperCase();
-      totalPoints += grades[grade] * credit;
-      totalCredits += credit;
-    }
-
-    const gpa = totalPoints / totalCredits;
-    const cgpa = ((prevCgpa * prevCredits) + (gpa * totalCredits)) / (prevCredits + totalCredits);
-
-    results.innerHTML = `<h3>Your GPA: ${gpa.toFixed(2)}</h3><h3>Your CGPA: ${cgpa.toFixed(2)}</h3>`;
-
-    let username = localStorage.getItem("unirazak_user");
-    if (!username) {
-      username = prompt("Enter your name (UniRazak Student):");
-      localStorage.setItem("unirazak_user", username);
-    }
-
-    await addDoc(collection(db, "leaderboard"), {
-      name: username,
-      gpa: gpa,
-      cgpa: cgpa,
-      timestamp: Date.now()
-    });
-
-    if (chart) chart.destroy();
-    const ctx = document.getElementById("progressChart");
-    chart = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: ["Previous", "Current"],
-        datasets: [
-          {
-            label: "CGPA Progress",
-            data: [prevCgpa, cgpa],
-            borderColor: "#00e0ff",
-            borderWidth: 3,
-            fill: false,
-            tension: 0.4
-          }
-        ]
-      },
-      options: {
-        animation: { duration: 1500 },
-        scales: { y: { beginAtZero: true, max: 4.0 } }
-      }
-    });
-  });
-
-  async function loadLeaderboard() {
-    leaderboardList.innerHTML = "<li>Loading...</li>";
-    const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
-    const snapshot = await getDocs(q);
-
-    leaderboardList.innerHTML = "";
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      leaderboardList.innerHTML += `<li>${d.name} — CGPA: ${d.cgpa.toFixed(2)} | GPA: ${d.gpa.toFixed(2)}</li>`;
-    });
+  for (let i = 1; i <= numSubjects; i++) {
+    subjectsDiv.innerHTML += `
+      <div class="subject-row">
+        <input type="text" placeholder="Subject ${i} name" class="subjectName" />
+        <input type="number" placeholder="Credit Hour" class="credit" />
+        <input type="number" placeholder="Grade Point (0-4)" class="grade" />
+      </div>`;
   }
+
+  document.getElementById("calculateBtn").classList.remove("hidden");
+});
+
+document.getElementById("calculateBtn").addEventListener("click", () => {
+  const credits = document.querySelectorAll(".credit");
+  const grades = document.querySelectorAll(".grade");
+
+  let totalCredits = 0;
+  let totalPoints = 0;
+
+  for (let i = 0; i < credits.length; i++) {
+    const c = parseFloat(credits[i].value);
+    const g = parseFloat(grades[i].value);
+    if (isNaN(c) || isNaN(g)) continue;
+    totalCredits += c;
+    totalPoints += c * g;
+  }
+
+  const gpa = (totalPoints / totalCredits).toFixed(2);
+  const cgpa = gpa;
+
+  document.getElementById("gpa").innerText = gpa;
+  document.getElementById("cgpa").innerText = cgpa;
+
+  document.getElementById("result").classList.remove("hidden");
+  document.getElementById("progressChart").classList.remove("hidden");
+
+  drawChart([gpa]);
+});
+
+document.getElementById("saveProgress").addEventListener("click", async () => {
+  const cgpa = parseFloat(document.getElementById("cgpa").innerText);
+  if (!cgpa || !username) return alert("Invalid data!");
+
+  await addDoc(collection(db, "leaderboard"), {
+    name: username,
+    cgpa: cgpa,
+    timestamp: new Date()
+  });
+
+  alert("Saved successfully!");
+  loadLeaderboard();
+});
+
+async function loadLeaderboard() {
+  const leaderboardList = document.getElementById("leaderboard");
+  leaderboardList.innerHTML = "";
+
+  const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    const li = document.createElement("li");
+    li.textContent = `${data.name} — ${data.cgpa.toFixed(2)}`;
+    leaderboardList.appendChild(li);
+  });
+
+  leaderboardSection.classList.remove("hidden");
+}
+
+function drawChart(data) {
+  const ctx = document.getElementById("progressChart").getContext("2d");
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: ["Current GPA"],
+      datasets: [{
+        label: "CGPA Progress",
+        data: data,
+        borderWidth: 2,
+        borderColor: "#00ffff",
+        fill: false,
+        tension: 0.3
+      }]
+    },
+    options: {
+      animation: { duration: 1000, easing: "easeOutQuart" },
+      scales: { y: { beginAtZero: true, max: 4 } }
+    }
+  });
 }
