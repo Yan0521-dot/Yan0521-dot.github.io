@@ -1,144 +1,156 @@
-// ===== FIREBASE SETUP =====
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-// Your Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
-  authDomain: "cgpa-calculator-ur.firebaseapp.com",
-  projectId: "cgpa-calculator-ur",
-  storageBucket: "cgpa-calculator-ur.firebasestorage.app",
-  messagingSenderId: "345716541673",
-  appId: "1:345716541673:web:0633637368fb0156d98878",
-  measurementId: "G-277D7RMJLH"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// ===== DOM ELEMENTS =====
-const nameSection = document.getElementById("name-section");
-const cgpaSection = document.getElementById("cgpa-section");
-const saveNameBtn = document.getElementById("save-name");
 const usernameInput = document.getElementById("username");
-const addSubjectsBtn = document.getElementById("addSubjects");
-const subjectsDiv = document.getElementById("subjects");
-const calculateBtn = document.getElementById("calculateBtn");
-const resultDiv = document.getElementById("result");
-const gpaSpan = document.getElementById("gpa");
-const cgpaSpan = document.getElementById("cgpa");
-const saveProgressBtn = document.getElementById("saveProgress");
-const leaderboardBtn = document.getElementById("leaderboard-btn");
-const leaderboardDiv = document.getElementById("leaderboard");
+const saveNameBtn = document.getElementById("saveName");
+const userSection = document.getElementById("user-section");
+const calculatorSection = document.getElementById("calculator-section");
+const leaderboardSection = document.getElementById("leaderboard-section");
+const leaderboardList = document.getElementById("leaderboard");
 
-let userName = localStorage.getItem("username");
+const db = window.db;
+const { collection, addDoc, getDocs, query, orderBy, limit } = window.firestoreRefs;
 
-// ===== SAVE USERNAME =====
+let userName = localStorage.getItem("userName") || null;
+let chart;
+let progressData = { gpa: [], cgpa: [] };
+
+document.getElementById("menuToggle").addEventListener("click", () => {
+  document.getElementById("menuContent").classList.toggle("show");
+});
+
+document.getElementById("leaderboardBtn").addEventListener("click", async () => {
+  calculatorSection.style.display = "none";
+  leaderboardSection.style.display = "block";
+  await loadLeaderboard();
+});
+
+document.getElementById("homeBtn").addEventListener("click", () => {
+  leaderboardSection.style.display = "none";
+  calculatorSection.style.display = "block";
+});
+
+if (userName) {
+  userSection.style.display = "none";
+  calculatorSection.style.display = "block";
+} else {
+  userSection.style.display = "block";
+}
+
 saveNameBtn.addEventListener("click", () => {
-  const name = usernameInput.value.trim();
-  if (name === "") {
-    alert("Please enter your name first!");
-    return;
+  userName = usernameInput.value.trim();
+  if (userName) {
+    localStorage.setItem("userName", userName);
+    userSection.style.display = "none";
+    calculatorSection.style.display = "block";
   }
-  localStorage.setItem("username", name);
-  userName = name;
-  nameSection.classList.add("hidden");
-  cgpaSection.classList.remove("hidden");
 });
 
-// ===== ADD SUBJECT INPUT FIELDS =====
-addSubjectsBtn.addEventListener("click", () => {
-  const numSubjects = parseInt(document.getElementById("numSubjects").value);
-  subjectsDiv.innerHTML = "";
-
-  if (!numSubjects || numSubjects <= 0) {
-    alert("Enter a valid number of subjects!");
-    return;
+document.getElementById("generateFields").addEventListener("click", () => {
+  const num = document.getElementById("subjects").value;
+  const container = document.getElementById("subjectsContainer");
+  container.innerHTML = "";
+  for (let i = 1; i <= num; i++) {
+    container.innerHTML += `
+      <div>
+        <input type="text" placeholder="Subject ${i} Name" class="subject-name"/>
+        <input type="number" placeholder="Credit Hours" class="credit"/>
+        <select class="grade">
+          <option value="4">A</option>
+          <option value="3.7">A-</option>
+          <option value="3.3">B+</option>
+          <option value="3">B</option>
+          <option value="2.7">B-</option>
+          <option value="2.3">C+</option>
+          <option value="2">C</option>
+          <option value="1.7">C-</option>
+          <option value="1.3">D+</option>
+          <option value="1">D</option>
+          <option value="0">F</option>
+          <option value="S">S</option>
+          <option value="US">US</option>
+        </select>
+      </div>`;
   }
-
-  for (let i = 1; i <= numSubjects; i++) {
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <h4>Subject ${i}</h4>
-      <input type="text" placeholder="Subject Name" id="subject${i}">
-      <input type="number" placeholder="Credit Hours" id="credit${i}" min="1">
-      <select id="grade${i}">
-        <option value="4.00">A+</option>
-        <option value="4.00">A</option>
-        <option value="3.67">A-</option>
-        <option value="3.33">B+</option>
-        <option value="3.00">B</option>
-        <option value="2.67">B-</option>
-        <option value="2.33">C+</option>
-        <option value="2.00">C</option>
-        <option value="1.67">C-</option>
-        <option value="1.33">D+</option>
-        <option value="1.00">D</option>
-        <option value="0.00">F</option>
-      </select>
-    `;
-    subjectsDiv.appendChild(div);
-  }
-
-  calculateBtn.classList.remove("hidden");
 });
 
-// ===== CALCULATE GPA + CGPA =====
-calculateBtn.addEventListener("click", async () => {
-  const numSubjects = parseInt(document.getElementById("numSubjects").value);
-  let totalCredits = 0;
-  let totalPoints = 0;
+document.getElementById("calculateBtn").addEventListener("click", () => {
+  const credits = document.querySelectorAll(".credit");
+  const grades = document.querySelectorAll(".grade");
+  const prevCredits = parseFloat(document.getElementById("prevCredits").value || 0);
+  const prevCgpa = parseFloat(document.getElementById("prevCgpa").value || 0);
+  let totalCredits = 0, totalPoints = 0;
 
-  for (let i = 1; i <= numSubjects; i++) {
-    const credit = parseFloat(document.getElementById(`credit${i}`).value);
-    const grade = parseFloat(document.getElementById(`grade${i}`).value);
-
-    if (!credit || isNaN(grade)) {
-      alert(`Please fill all fields for Subject ${i}`);
-      return;
+  credits.forEach((credit, i) => {
+    const c = parseFloat(credit.value);
+    const g = grades[i].value === "S" || grades[i].value === "US" ? null : parseFloat(grades[i].value);
+    if (!isNaN(c) && g !== null) {
+      totalCredits += c;
+      totalPoints += c * g;
     }
-
-    totalCredits += credit;
-    totalPoints += credit * grade;
-  }
+  });
 
   const gpa = totalPoints / totalCredits;
-  const cgpa = gpa; // You can later modify to include previous CGPA
+  const cgpa = (prevCgpa * prevCredits + gpa * totalCredits) / (prevCredits + totalCredits);
 
-  gpaSpan.textContent = gpa.toFixed(2);
-  cgpaSpan.textContent = cgpa.toFixed(2);
-  resultDiv.classList.remove("hidden");
+  document.getElementById("results").innerHTML = `
+    <p>GPA: ${gpa.toFixed(2)}</p>
+    <p>CGPA: ${cgpa.toFixed(2)}</p>
+  `;
 
-  // Save to Firestore
-  document.getElementById("saveProgress").addEventListener("click", async () => {
-    try {
-      await addDoc(collection(db, "leaderboard"), {
-        name: userName,
-        gpa: gpa.toFixed(2),
-        cgpa: cgpa.toFixed(2),
-        timestamp: new Date().toISOString(),
-      });
-      alert("✅ Progress saved successfully!");
-    } catch (err) {
-      console.error("Error saving data:", err);
-      alert("❌ Failed to save progress.");
-    }
-  });
+  document.getElementById("chartContainer").style.display = "block";
+  updateChart(gpa, cgpa);
 });
 
-// ===== LEADERBOARD =====
-leaderboardBtn.addEventListener("click", async () => {
-  leaderboardDiv.innerHTML = "<h3>🏆 Top 10 Leaderboard</h3>";
+function updateChart(gpa, cgpa) {
+  const ctx = document.getElementById("progressChart");
+  progressData.gpa.push(gpa);
+  progressData.cgpa.push(cgpa);
+
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: progressData.gpa.map((_, i) => `Sem ${i + 1}`),
+      datasets: [
+        { label: "GPA", data: progressData.gpa, borderColor: "#ff4747", borderWidth: 3, fill: false },
+        { label: "CGPA", data: progressData.cgpa, borderColor: "#b30000", borderWidth: 3, fill: false },
+      ],
+    },
+    options: {
+      animation: { duration: 1500 },
+      scales: { y: { beginAtZero: true, max: 4.0 } },
+    },
+  });
+}
+
+document.getElementById("saveProgress").addEventListener("click", async () => {
+  const lastGpa = progressData.gpa.at(-1);
+  const lastCgpa = progressData.cgpa.at(-1);
+
+  if (lastCgpa && userName) {
+    await addDoc(collection(db, "leaderboard"), {
+      name: userName,
+      gpa: lastGpa.toFixed(2),
+      cgpa: lastCgpa.toFixed(2),
+    });
+    alert("Progress saved! 🔥");
+  }
+});
+
+document.getElementById("resetChart").addEventListener("click", () => {
+  progressData = { gpa: [], cgpa: [] };
+  if (chart) chart.destroy();
+  alert("Chart reset.");
+});
+
+async function loadLeaderboard() {
+  leaderboardList.innerHTML = "Loading...";
   const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
-  const snapshot = await getDocs(q);
+  const querySnapshot = await getDocs(q);
 
-  snapshot.forEach((doc) => {
+  leaderboardList.innerHTML = "";
+  querySnapshot.forEach(doc => {
     const data = doc.data();
-    leaderboardDiv.innerHTML += `
-      <p>👤 ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}</p>
-    `;
+    const li = document.createElement("li");
+    li.textContent = `${data.name} — GPA: ${data.gpa}, CGPA: ${data.cgpa}`;
+    leaderboardList.appendChild(li);
   });
-
-  leaderboardDiv.classList.toggle("hidden");
-});
+}
