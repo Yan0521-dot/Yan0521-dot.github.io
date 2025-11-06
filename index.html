@@ -3,81 +3,197 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniRazak CGPA Tracker</title>
+  <title>UniRazak CGPA & GPA Calculator 🎓</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <img src="unirazak_logo1.png" alt="UniRazak Logo" class="logo" />
-    <h1>🎓 UniRazak CGPA & GPA Tracker</h1>
-    <p class="subtitle">Calculate. Track. Level Up 🚀</p>
-  </header>
+  <div class="container">
+    <header>
+      <img src="unirazak_logo.png" class="logo" alt="UniRazak Logo" />
+      <h1>UniRazak CGPA & GPA Calculator 🎓</h1>
+      <p class="subtitle">Track your progress & see the leaderboard 🏆</p>
+    </header>
 
-  <main>
-    <section class="calculator">
-      <h2>📘 GPA & CGPA Calculator</h2>
+    <!-- Navigation buttons -->
+    <div class="menu">
+      <button id="calcBtn">CGPA Calculator</button>
+      <button id="leaderboardBtn">Leaderboard</button>
+    </div>
 
-      <label>Number of subjects:</label>
-      <input type="number" id="numSubjects" min="1" max="15" />
-      <button id="generateFields">Generate Fields</button>
+    <!-- Calculator Section -->
+    <div id="calculatorSection">
+      <h2>✨ Calculate your GPA & CGPA ✨</h2>
+      <label for="numSubjects">Number of subjects:</label>
+      <input type="number" id="numSubjects" placeholder="Enter number" />
+      <button id="generateBtn">Generate Fields</button>
 
       <div id="subjectsContainer"></div>
 
       <div class="previous-info">
-        <h3>Previous Semester Info</h3>
         <label>Total previous credits:</label>
-        <input type="number" id="prevCredits" step="0.01" />
-        <label>      Previous CGPA:</label>
-        <input type="number" id="prevCGPA" step="0.01" />
+        <input type="number" id="prevCredits" />
+        <label>Previous CGPA:</label>
+        <input type="number" id="prevCgpa" step="0.01" />
       </div>
 
-      <button id="calculate">Calculate GPA & CGPA</button>
+      <button id="calculateBtn">Calculate GPA & CGPA</button>
+
       <div id="results"></div>
-    </section>
-
-    <section class="graph">
-      <h2>📊 Track Your Progress</h2>
       <canvas id="progressChart"></canvas>
-      <div class="graph-buttons">
-        <button id="saveProgress">💾 Save Progress</button>
-        <button id="resetProgress"♻️ Reset</button>
-      </div>
-      <p id="motivation" class="motivation"></p>
-    </section>
-  </main>
+    </div>
 
-  <footer>
-    © 2025 by Aathityan | Made for UniRazak Students ❤️ <br />
-    More awesome updates are on their way 🔥
-  </footer>
+    <!-- Leaderboard Section -->
+    <div id="leaderboardSection" style="display: none;">
+      <h2>🏆 UniRazak Leaderboard 🏆</h2>
+      <ul id="leaderboardList"></ul>
+    </div>
 
+    <footer>© 2025 by Aathityan | Made for UniRazak Students ❤️</footer>
+  </div>
+
+  <!-- Firebase + App Script -->
   <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    // Import Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+    import Chart from "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
-    authDomain: "cgpa-calculator-ur.firebaseapp.com",
-    projectId: "cgpa-calculator-ur",
-    storageBucket: "cgpa-calculator-ur.firebasestorage.app",
-    messagingSenderId: "345716541673",
-    appId: "1:345716541673:web:0633637368fb0156d98878",
-    measurementId: "G-277D7RMJLH"
-  };
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
+      authDomain: "cgpa-calculator-ur.firebaseapp.com",
+      projectId: "cgpa-calculator-ur",
+      storageBucket: "cgpa-calculator-ur.firebasestorage.app",
+      messagingSenderId: "345716541673",
+      appId: "1:345716541673:web:0633637368fb0156d98878",
+      measurementId: "G-277D7RMJLH"
+    };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-  
-  <script src="script.js"></script>
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // --- APP FUNCTIONALITY ---
+    const numSubjectsInput = document.getElementById("numSubjects");
+    const generateBtn = document.getElementById("generateBtn");
+    const subjectsContainer = document.getElementById("subjectsContainer");
+    const calcBtn = document.getElementById("calculateBtn");
+    const results = document.getElementById("results");
+    const leaderboardList = document.getElementById("leaderboardList");
+    const calcSection = document.getElementById("calculatorSection");
+    const leaderboardSection = document.getElementById("leaderboardSection");
+    const calcBtnMenu = document.getElementById("calcBtn");
+    const leaderboardBtn = document.getElementById("leaderboardBtn");
+
+    let chart = null;
+
+    calcBtnMenu.addEventListener("click", () => {
+      calcSection.style.display = "block";
+      leaderboardSection.style.display = "none";
+    });
+
+    leaderboardBtn.addEventListener("click", async () => {
+      calcSection.style.display = "none";
+      leaderboardSection.style.display = "block";
+      loadLeaderboard();
+    });
+
+    generateBtn.addEventListener("click", () => {
+      subjectsContainer.innerHTML = "";
+      const num = parseInt(numSubjectsInput.value);
+      for (let i = 1; i <= num; i++) {
+        subjectsContainer.innerHTML += `
+          <div class="subject-row">
+            <input type="text" placeholder="Subject ${i} name" id="subName${i}" />
+            <input type="number" placeholder="Credit Hour" id="credit${i}" />
+            <input type="text" placeholder="Grade (A, B+, C... or S/US)" id="grade${i}" />
+          </div>`;
+      }
+    });
+
+    calcBtn.addEventListener("click", async () => {
+      const num = parseInt(numSubjectsInput.value);
+      const prevCredits = parseFloat(document.getElementById("prevCredits").value);
+      const prevCgpa = parseFloat(document.getElementById("prevCgpa").value);
+
+      const grades = {
+        A: 4.0, "A-": 3.7, "B+": 3.3, B: 3.0, "B-": 2.7,
+        "C+": 2.3, C: 2.0, "C-": 1.7, D: 1.3, F: 0
+      };
+
+      let totalPoints = 0, totalCredits = 0;
+
+      for (let i = 1; i <= num; i++) {
+        const credit = parseFloat(document.getElementById(`credit${i}`).value);
+        const grade = document.getElementById(`grade${i}`).value.toUpperCase();
+
+        if (grade === "S" || grade === "US") continue;
+
+        totalPoints += grades[grade] * credit;
+        totalCredits += credit;
+      }
+
+      const gpa = totalPoints / totalCredits;
+      const cgpa = ((prevCgpa * prevCredits) + (gpa * totalCredits)) / (prevCredits + totalCredits);
+
+      results.innerHTML = `<h3>Your GPA: ${gpa.toFixed(2)}</h3><h3>Your CGPA: ${cgpa.toFixed(2)}</h3>`;
+
+      let username = localStorage.getItem("unirazak_user");
+      if (!username) {
+        username = prompt("Enter your name (UniRazak Student):");
+        localStorage.setItem("unirazak_user", username);
+      }
+
+      await addDoc(collection(db, "leaderboard"), {
+        name: username,
+        gpa: gpa,
+        cgpa: cgpa,
+        timestamp: Date.now()
+      });
+
+      if (chart) chart.destroy();
+      const ctx = document.getElementById("progressChart");
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["Previous", "Current"],
+          datasets: [
+            {
+              label: "CGPA Progress",
+              data: [prevCgpa, cgpa],
+              borderColor: "#00e0ff",
+              borderWidth: 3,
+              fill: false,
+              tension: 0.4
+            }
+          ]
+        },
+        options: {
+          animation: { duration: 1500 },
+          scales: { y: { beginAtZero: true, max: 4.0 } }
+        }
+      });
+    });
+
+    async function loadLeaderboard() {
+      leaderboardList.innerHTML = "<li>Loading...</li>";
+      const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
+      const snapshot = await getDocs(q);
+
+      leaderboardList.innerHTML = "";
+      let rank = 1;
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        let color = "#00e0ff";
+        if (rank === 1) color = "#FFD700";
+        else if (rank === 2) color = "#C0C0C0";
+        else if (rank === 3) color = "#CD7F32";
+
+        leaderboardList.innerHTML += `<li style="color:${color}">${rank}. ${d.name} — CGPA: ${d.cgpa.toFixed(2)} | GPA: ${d.gpa.toFixed(2)}</li>`;
+        rank++;
+      });
+    }
+  </script>
 </body>
 </html>
-
 
