@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CGPA Tracker</title>
+  <title>CGPA Progress Tracker</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -38,38 +38,10 @@
       <canvas id="progressChart" class="hidden"></canvas>
     </div>
 
-    <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">💻 Made by <b>Aathityan</b> | For UniRazak Students</p>
+    <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">💻 Made by <b>Aathityan</b> | For UniRazak Students ❤️</p>
   </div>
 
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
-      authDomain: "cgpa-calculator-ur.firebaseapp.com",
-      projectId: "cgpa-calculator-ur",
-      storageBucket: "cgpa-calculator-ur.firebasestorage.app",
-      messagingSenderId: "345716541673",
-      appId: "1:345716541673:web:0633637368fb0156d98878",
-      measurementId: "G-277D7RMJLH"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Expose db + Firestore funcs globally
-    window.db = db;
-    window.collection = collection;
-    window.addDoc = addDoc;
-    window.getDocs = getDocs;
-    window.query = query;
-    window.orderBy = orderBy;
-    window.limit = limit;
-  </script>
-
+  <!-- Firebase + App Logic -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
-
