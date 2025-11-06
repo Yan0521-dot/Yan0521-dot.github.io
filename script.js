@@ -1,3 +1,17 @@
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
+  authDomain: "cgpa-calculator-ur.firebaseapp.com",
+  projectId: "cgpa-calculator-ur",
+  storageBucket: "cgpa-calculator-ur.firebasestorage.app",
+  messagingSenderId: "345716541673",
+  appId: "1:345716541673:web:0633637368fb0156d98878",
+  measurementId: "G-277D7RMJLH"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 const usernameInput = document.getElementById("username");
 const saveNameBtn = document.getElementById("saveName");
 const userSection = document.getElementById("user-section");
@@ -5,17 +19,16 @@ const calculatorSection = document.getElementById("calculator-section");
 const leaderboardSection = document.getElementById("leaderboard-section");
 const leaderboardList = document.getElementById("leaderboard");
 
-const db = window.db;
-const { collection, addDoc, getDocs, query, orderBy, limit } = window.firestoreRefs;
-
 let userName = localStorage.getItem("userName") || null;
 let chart;
 let progressData = { gpa: [], cgpa: [] };
 
+// Menu toggle
 document.getElementById("menuToggle").addEventListener("click", () => {
   document.getElementById("menuContent").classList.toggle("show");
 });
 
+// Nav buttons
 document.getElementById("leaderboardBtn").addEventListener("click", async () => {
   calculatorSection.style.display = "none";
   leaderboardSection.style.display = "block";
@@ -27,9 +40,11 @@ document.getElementById("homeBtn").addEventListener("click", () => {
   calculatorSection.style.display = "block";
 });
 
+// Show calculator if returning user
 if (userName) {
   userSection.style.display = "none";
   calculatorSection.style.display = "block";
+  document.getElementById("motivation").innerText = `Welcome back, ${userName}! Keep going 💪`;
 } else {
   userSection.style.display = "block";
 }
@@ -40,9 +55,17 @@ saveNameBtn.addEventListener("click", () => {
     localStorage.setItem("userName", userName);
     userSection.style.display = "none";
     calculatorSection.style.display = "block";
+
+    const quotes = [
+      "You’re capable of amazing things, keep going!",
+      "Believe in yourself — every GPA point matters 💯",
+      "One step closer to your dream, UR student!"
+    ];
+    document.getElementById("motivation").innerText = quotes[Math.floor(Math.random() * quotes.length)];
   }
 });
 
+// Generate subject fields
 document.getElementById("generateFields").addEventListener("click", () => {
   const num = document.getElementById("subjects").value;
   const container = document.getElementById("subjectsContainer");
@@ -71,6 +94,7 @@ document.getElementById("generateFields").addEventListener("click", () => {
   }
 });
 
+// Calculate GPA/CGPA
 document.getElementById("calculateBtn").addEventListener("click", () => {
   const credits = document.querySelectorAll(".credit");
   const grades = document.querySelectorAll(".grade");
@@ -99,6 +123,7 @@ document.getElementById("calculateBtn").addEventListener("click", () => {
   updateChart(gpa, cgpa);
 });
 
+// Update chart
 function updateChart(gpa, cgpa) {
   const ctx = document.getElementById("progressChart");
   progressData.gpa.push(gpa);
@@ -121,33 +146,42 @@ function updateChart(gpa, cgpa) {
   });
 }
 
+// Save to leaderboard (only if top 10-worthy)
 document.getElementById("saveProgress").addEventListener("click", async () => {
   const lastGpa = progressData.gpa.at(-1);
   const lastCgpa = progressData.cgpa.at(-1);
 
-  if (lastCgpa && userName) {
-    await addDoc(collection(db, "leaderboard"), {
+  if (!lastCgpa || !userName) return alert("No data to save.");
+
+  const topQuery = await db.collection("leaderboard").orderBy("cgpa", "desc").limit(10).get();
+  const lowestTopCgpa = topQuery.docs[topQuery.docs.length - 1]?.data()?.cgpa || 0;
+
+  if (parseFloat(lastCgpa.toFixed(2)) > parseFloat(lowestTopCgpa)) {
+    await db.collection("leaderboard").add({
       name: userName,
       gpa: lastGpa.toFixed(2),
       cgpa: lastCgpa.toFixed(2),
     });
-    alert("Progress saved! 🔥");
+    alert("🔥 Congrats! You made it to the leaderboard!");
+  } else {
+    alert("Keep pushing! Your CGPA isn’t in top 10 yet 💪");
   }
 });
 
+// Reset chart
 document.getElementById("resetChart").addEventListener("click", () => {
   progressData = { gpa: [], cgpa: [] };
   if (chart) chart.destroy();
   alert("Chart reset.");
 });
 
+// Load leaderboard
 async function loadLeaderboard() {
   leaderboardList.innerHTML = "Loading...";
-  const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
-  const querySnapshot = await getDocs(q);
+  const q = await db.collection("leaderboard").orderBy("cgpa", "desc").limit(10).get();
 
   leaderboardList.innerHTML = "";
-  querySnapshot.forEach(doc => {
+  q.forEach(doc => {
     const data = doc.data();
     const li = document.createElement("li");
     li.textContent = `${data.name} — GPA: ${data.gpa}, CGPA: ${data.cgpa}`;
