@@ -1,8 +1,3 @@
-import { collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
-const db = window.db;
-
 const nameSection = document.getElementById("name-section");
 const cgpaSection = document.getElementById("cgpa-section");
 const saveNameBtn = document.getElementById("save-name");
@@ -24,8 +19,6 @@ let userName = localStorage.getItem("username");
 if (userName) {
   nameSection.classList.add("hidden");
   cgpaSection.classList.remove("hidden");
-} else {
-  cgpaSection.classList.add("hidden");
 }
 
 // ==== Save name once ====
@@ -100,7 +93,7 @@ calculateBtn.addEventListener("click", async () => {
   }
 
   const GPA = totalGradePoints / totalCredits;
-  const CGPA = GPA; // simplified single-sem calculation
+  const CGPA = GPA; // simplified single-sem calc
 
   gpaSpan.textContent = GPA.toFixed(2);
   cgpaSpan.textContent = CGPA.toFixed(2);
@@ -123,10 +116,9 @@ calculateBtn.addEventListener("click", async () => {
     },
   });
 
-  // Save Progress
   document.getElementById("saveProgress").addEventListener("click", async () => {
     try {
-      await addDoc(collection(db, "leaderboard"), {
+      await window.addDoc(window.collection(window.db, "leaderboard"), {
         name: userName,
         gpa: GPA.toFixed(2),
         cgpa: CGPA.toFixed(2),
@@ -145,8 +137,13 @@ leaderboardBtn.addEventListener("click", async () => {
   leaderboardDiv.classList.toggle("hidden");
   leaderboardDiv.innerHTML = "<h3>🏆 Top 10 Leaderboard</h3>";
 
-  const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
-  const snapshot = await getDocs(q);
+  const q = window.query(window.collection(window.db, "leaderboard"), window.orderBy("cgpa", "desc"), window.limit(10));
+  const snapshot = await window.getDocs(q);
+
+  if (snapshot.empty) {
+    leaderboardDiv.innerHTML += "<p>No records yet 😅</p>";
+    return;
+  }
 
   snapshot.forEach((doc) => {
     const data = doc.data();
