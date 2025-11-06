@@ -1,3 +1,30 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+// 🔹 Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
+  authDomain: "cgpa-calculator-ur.firebaseapp.com",
+  projectId: "cgpa-calculator-ur",
+  storageBucket: "cgpa-calculator-ur.firebasestorage.app",
+  messagingSenderId: "345716541673",
+  appId: "1:345716541673:web:0633637368fb0156d98878",
+  measurementId: "G-277D7RMJLH",
+};
+
+// 🔹 Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// === UI Elements ===
 const nameSection = document.getElementById("name-section");
 const cgpaSection = document.getElementById("cgpa-section");
 const saveNameBtn = document.getElementById("save-name");
@@ -15,17 +42,19 @@ const progressChart = document.getElementById("progressChart");
 
 let userName = localStorage.getItem("username");
 
-// ==== If username exists, skip name section ====
+// === Show name section only once ===
 if (userName) {
   nameSection.classList.add("hidden");
   cgpaSection.classList.remove("hidden");
+} else {
+  cgpaSection.classList.add("hidden");
 }
 
-// ==== Save name once ====
+// === Save Name ===
 saveNameBtn.addEventListener("click", () => {
   const name = usernameInput.value.trim();
   if (!name) {
-    alert("Please enter your name first!");
+    alert("Please enter your name!");
     return;
   }
   localStorage.setItem("username", name);
@@ -34,7 +63,7 @@ saveNameBtn.addEventListener("click", () => {
   cgpaSection.classList.remove("hidden");
 });
 
-// ==== Add subjects dynamically ====
+// === Add Subjects ===
 addSubjectsBtn.addEventListener("click", () => {
   const numSubjects = parseInt(numSubjectsInput.value);
   subjectsDiv.innerHTML = "";
@@ -71,7 +100,7 @@ addSubjectsBtn.addEventListener("click", () => {
   calculateBtn.classList.remove("hidden");
 });
 
-// ==== Calculate GPA + CGPA ====
+// === Calculate GPA / CGPA ===
 calculateBtn.addEventListener("click", async () => {
   let totalCredits = 0;
   let totalGradePoints = 0;
@@ -93,7 +122,7 @@ calculateBtn.addEventListener("click", async () => {
   }
 
   const GPA = totalGradePoints / totalCredits;
-  const CGPA = GPA; // simplified single-sem calc
+  const CGPA = GPA;
 
   gpaSpan.textContent = GPA.toFixed(2);
   cgpaSpan.textContent = CGPA.toFixed(2);
@@ -116,9 +145,10 @@ calculateBtn.addEventListener("click", async () => {
     },
   });
 
+  // Save Progress to Firebase
   document.getElementById("saveProgress").addEventListener("click", async () => {
     try {
-      await window.addDoc(window.collection(window.db, "leaderboard"), {
+      await addDoc(collection(db, "leaderboard"), {
         name: userName,
         gpa: GPA.toFixed(2),
         cgpa: CGPA.toFixed(2),
@@ -132,21 +162,26 @@ calculateBtn.addEventListener("click", async () => {
   });
 });
 
-// ==== Leaderboard ====
+// === Leaderboard ===
 leaderboardBtn.addEventListener("click", async () => {
   leaderboardDiv.classList.toggle("hidden");
   leaderboardDiv.innerHTML = "<h3>🏆 Top 10 Leaderboard</h3>";
 
-  const q = window.query(window.collection(window.db, "leaderboard"), window.orderBy("cgpa", "desc"), window.limit(10));
-  const snapshot = await window.getDocs(q);
+  try {
+    const q = query(collection(db, "leaderboard"), orderBy("cgpa", "desc"), limit(10));
+    const snapshot = await getDocs(q);
 
-  if (snapshot.empty) {
-    leaderboardDiv.innerHTML += "<p>No records yet 😅</p>";
-    return;
+    if (snapshot.empty) {
+      leaderboardDiv.innerHTML += "<p>No records yet 😅</p>";
+      return;
+    }
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      leaderboardDiv.innerHTML += `<p>👤 ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}</p>`;
+    });
+  } catch (err) {
+    console.error(err);
+    leaderboardDiv.innerHTML += "<p>⚠️ Error loading leaderboard.</p>";
   }
-
-  snapshot.forEach((doc) => {
-    const data = doc.data();
-    leaderboardDiv.innerHTML += `<p>👤 ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}</p>`;
-  });
 });
