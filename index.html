@@ -3,51 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CGPA Tracker</title>
+  <title>UniRazak CGPA Tracker</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>📘 CGPA Progress Tracker</h1>
+  <header>
+    <img src="unirazak_logo.png" alt="UniRazak Logo" class="logo" />
+    <h1>🎓 UniRazak CGPA & GPA Tracker</h1>
+  </header>
 
-    <div id="name-section" class="card">
-      <h2>Enter Your Name</h2>
-      <input type="text" id="username" placeholder="Your name..." />
-      <button id="save-name">Save Name</button>
-    </div>
+  <main>
+    <section id="user-section">
+      <h2>Welcome!</h2>
+      <p>Enter your name to start tracking your academic journey 🚀</p>
+      <input type="text" id="username" placeholder="Your name here" />
+      <button id="saveName">Save Name</button>
+    </section>
 
-    <div id="cgpa-section" class="card hidden">
-      <h2>Enter Your CGPA Details</h2>
-      <label>Number of Subjects:</label>
-      <input type="number" id="numSubjects" min="1" />
-      <button id="addSubjects">Add Subjects</button>
+    <section id="calculator-section" style="display:none;">
+      <h2>✨ CGPA & GPA Calculator ✨</h2>
+      <label for="subjects">Number of subjects:</label>
+      <input type="number" id="subjects" min="1" placeholder="e.g. 6" />
+      <button id="generateFields">Generate Fields</button>
 
-      <div id="subjects"></div>
+      <div id="subjectsContainer"></div>
 
-      <button id="calculateBtn" class="hidden">Calculate GPA & CGPA</button>
-<button id="leaderboard-btn">🏆 View Leaderboard</button>
-<div id="leaderboard" class="hidden"></div>
-
-      <div id="result" class="hidden">
-        <h3>Your GPA: <span id="gpa"></span></h3>
-        <h3>Your CGPA: <span id="cgpa"></span></h3>
-        <button id="saveProgress">Save Progress</button>
+      <div id="previousInfo">
+        <label>Total Previous Credits:</label>
+        <input type="number" id="prevCredits" />
+        <label>Previous CGPA:</label>
+        <input type="number" step="0.01" id="prevCgpa" />
       </div>
 
-      <canvas id="progressChart" class="hidden"></canvas>
-    </div>
+      <button id="calculateBtn">Calculate GPA & CGPA</button>
 
-    <div id="leaderboard-section" class="card hidden">
-      <h2>🏆 Leaderboard (Top 10)</h2>
-      <ol id="leaderboard"></ol>
+      <div id="results"></div>
+      <div id="chartContainer" style="display:none;">
+        <h3>📈 Track Your Progress</h3>
+        <canvas id="progressChart"></canvas>
+        <div class="chart-buttons">
+          <button id="saveProgress">Save Progress</button>
+          <button id="resetChart">Reset Chart</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="leaderboard-section" style="display:none;">
+      <h2>🏆 Top 10 Leaderboard</h2>
+      <ul id="leaderboard"></ul>
+    </section>
+  </main>
+
+  <nav class="menu">
+    <div class="hamburger" id="menuToggle">☰</div>
+    <div class="menu-content" id="menuContent">
+      <button id="leaderboardBtn">Leaderboard</button>
+      <button id="homeBtn">Calculator</button>
     </div>
-  </div>
+  </nav>
+
+  <footer>
+    <p>© 2025 by <strong>Aathityan</strong> | Made for <strong>UniRazak Students ❤️</strong></p>
+    <p>Keep pushing forward. Every semester is a new chance to rise higher 💪</p>
+  </footer>
 
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
@@ -61,10 +85,10 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    window.db = db; // Make db accessible from script.js
+    window.db = db;
+    window.firestoreRefs = { collection, addDoc, getDocs, query, orderBy, limit };
   </script>
 
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
