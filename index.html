@@ -3,60 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniRazak CGPA Tracker</title>
+  <title>CGPA Tracker</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <button id="menu-btn">☰</button>
-    <h1>UniRazak CGPA Tracker</h1>
-  </header>
+  <div class="container">
+    <h1>📘 CGPA Progress Tracker</h1>
 
-  <aside id="menu" class="hidden">
-    <button id="leaderboard-btn">🏆 Leaderboard</button>
-  </aside>
-
-  <main class="container">
-    <section id="name-section" class="card">
+    <div id="name-section" class="card">
       <h2>Enter Your Name</h2>
       <input type="text" id="username" placeholder="Your name..." />
       <button id="save-name">Save Name</button>
-    </section>
+    </div>
 
-    <section id="cgpa-section" class="card hidden">
-      <h2>Calculate Your GPA & CGPA</h2>
+    <div id="cgpa-section" class="card hidden">
+      <h2>Enter Your CGPA Details</h2>
       <label>Number of Subjects:</label>
       <input type="number" id="numSubjects" min="1" />
       <button id="addSubjects">Add Subjects</button>
 
       <div id="subjects"></div>
-      <button id="calculateBtn" class="hidden">Calculate</button>
+
+      <button id="calculateBtn" class="hidden">Calculate GPA & CGPA</button>
+      <button id="leaderboard-btn">🏆 View Leaderboard</button>
+      <div id="leaderboard" class="hidden"></div>
 
       <div id="result" class="hidden">
         <h3>Your GPA: <span id="gpa"></span></h3>
         <h3>Your CGPA: <span id="cgpa"></span></h3>
-        <button id="saveProgress">💾 Save Progress</button>
+        <button id="saveProgress">Save Progress</button>
       </div>
 
       <canvas id="progressChart" class="hidden"></canvas>
-    </section>
+    </div>
 
-    <section id="leaderboard-section" class="card hidden">
-      <h2>🏆 Top 10 Leaderboard</h2>
+    <div id="leaderboard-section" class="card hidden">
+      <h2>🏆 Leaderboard (Top 10)</h2>
       <ol id="leaderboard"></ol>
-    </section>
-
-    <footer>
-      <p>💪 Keep pushing forward — success is built step by step.</p>
-      <p>Made by <strong>Aathityan</strong> for UniRazak Students ❤️</p>
-    </footer>
-  </main>
+    </div>
+  </div>
 
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
@@ -70,7 +61,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    window.db = db;
+    window.db = db; // Make db accessible from script.js
   </script>
 
   <script type="module" src="script.js"></script>
