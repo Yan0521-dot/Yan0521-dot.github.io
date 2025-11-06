@@ -52,7 +52,32 @@
     More awesome updates are on their way 🔥
   </footer>
 
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
+    authDomain: "cgpa-calculator-ur.firebaseapp.com",
+    projectId: "cgpa-calculator-ur",
+    storageBucket: "cgpa-calculator-ur.firebasestorage.app",
+    messagingSenderId: "345716541673",
+    appId: "1:345716541673:web:0633637368fb0156d98878",
+    measurementId: "G-277D7RMJLH"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+  
   <script src="script.js"></script>
 </body>
 </html>
+
 
