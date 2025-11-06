@@ -37,12 +37,14 @@
 
       <canvas id="progressChart" class="hidden"></canvas>
     </div>
+
+    <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">💻 Made by <b>Aathityan</b> | For UniRazak Students</p>
   </div>
 
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
@@ -56,9 +58,17 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    window.db = db; // make db available for script.js
+
+    // Expose db + Firestore funcs globally
+    window.db = db;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.getDocs = getDocs;
+    window.query = query;
+    window.orderBy = orderBy;
+    window.limit = limit;
   </script>
 
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
