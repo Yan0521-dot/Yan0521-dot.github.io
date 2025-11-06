@@ -1,140 +1,81 @@
-/* === GENERAL LAYOUT === */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
+  background: black;
+  color: white;
+  text-align: center;
   margin: 0;
   padding: 0;
-  background-color: #fff;
-  color: #111;
-  text-align: center;
+  min-height: 100vh;
 }
 
-/* === HEADER === */
 header {
-  background-color: #b90000; /* UniRazak red */
-  color: white;
-  padding: 15px 10px;
+  background: #b30000;
+  padding: 15px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-}
-
-header h1 {
-  font-size: 1.3rem;
-  margin: 0;
-  font-weight: 700;
-}
-
-/* === LOGO === */
-#logo {
-  width: 60px;
-  height: auto;
-  margin-right: 10px;
-}
-
-/* === MENU BUTTON === */
-.menu-btn {
-  background: none;
-  border: none;
+  justify-content: space-between;
   color: white;
-  font-size: 1.8rem;
+}
+
+.logo {
+  width: 80px;
+}
+
+#menu-btn {
+  background: none;
+  color: white;
+  font-size: 24px;
+  border: none;
   cursor: pointer;
 }
 
-.menu {
-  display: none;
-  background-color: #222;
+#menu {
+  background: #222;
   padding: 10px;
-  text-align: left;
 }
 
-.menu.show {
-  display: block;
-}
-
-.menu a {
-  display: block;
-  color: white;
-  padding: 8px 0;
-  text-decoration: none;
-}
-
-.menu a:hover {
-  color: #ff3b3b;
-}
-
-/* === MAIN CONTENT === */
 .container {
+  margin-top: 30px;
   padding: 20px;
 }
 
-h2 {
-  color: #b90000;
-  margin-bottom: 10px;
-}
-
-/* === INPUTS AND BUTTONS === */
-input, select {
-  padding: 8px;
-  width: 60%;
-  max-width: 300px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #b30000;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
 }
 
 button {
-  background-color: #b90000;
+  background: #b30000;
   color: white;
   border: none;
-  border-radius: 6px;
   padding: 10px 20px;
+  border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
 }
 
 button:hover {
-  background-color: #900000;
+  background: #ff3333;
 }
 
-/* === MOTIVATION TEXT === */
-.motivation {
-  font-style: italic;
+.hidden {
+  display: none;
+}
+
+canvas {
+  width: 100%;
+  max-height: 250px;
   margin-top: 15px;
-  color: #555;
 }
 
-/* === LEADERBOARD === */
-#leaderboard {
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 0 6px rgba(0,0,0,0.1);
-}
-
-#leaderboard h3 {
-  color: #b90000;
-  font-weight: 700;
-}
-
-#leaderboard ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-#leaderboard li {
-  margin: 6px 0;
-  font-weight: 500;
-}
-
-/* === FOOTER === */
-footer {
-  margin-top: 40px;
-  padding: 10px;
-  color: #777;
-  font-size: 0.9rem;
-}
-
-footer strong {
-  color: #b90000;
+.footer {
+  margin-top: 30px;
+  font-size: 14px;
+  opacity: 0.8;
 }
