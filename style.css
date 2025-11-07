@@ -1,6 +1,6 @@
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(120deg, #0066ff, #00ccff);
+  background: linear-gradient(120deg, #8B0000, #FF0000);
   color: white;
   display: flex;
   justify-content: center;
@@ -82,4 +82,5 @@ canvas {
   border-radius: 8px; /* smooth edges */
   object-fit: contain;
 }
+
 
