@@ -63,7 +63,7 @@ saveNameBtn.addEventListener("click", () => {
   cgpaSection.classList.remove("hidden");
 });
 
-// === Add Subjects ===
+// === Add Subjects (with Subject Name Prompt) ===
 addSubjectsBtn.addEventListener("click", () => {
   const numSubjects = parseInt(numSubjectsInput.value);
   subjectsDiv.innerHTML = "";
@@ -73,9 +73,12 @@ addSubjectsBtn.addEventListener("click", () => {
   }
 
   for (let i = 1; i <= numSubjects; i++) {
+    let subjectName = prompt(`Enter the name of subject ${i}:`);
+    if (!subjectName || subjectName.trim() === "") subjectName = `Subject ${i}`;
+
     subjectsDiv.innerHTML += `
       <div class="subject">
-        <h3>Subject ${i}</h3>
+        <h3>${subjectName}</h3>
         <input type="number" id="credit${i}" placeholder="Credit Hours" min="1" />
         <select id="grade${i}">
           <option value="4.00">A+</option>
@@ -146,20 +149,23 @@ calculateBtn.addEventListener("click", async () => {
   });
 
   // Save Progress to Firebase
-  document.getElementById("saveProgress").addEventListener("click", async () => {
-    try {
-      await addDoc(collection(db, "leaderboard"), {
-        name: userName,
-        gpa: GPA.toFixed(2),
-        cgpa: CGPA.toFixed(2),
-        timestamp: new Date().toISOString(),
-      });
-      alert("✅ Progress saved successfully!");
-    } catch (e) {
-      console.error("Error saving progress:", e);
-      alert("❌ Error saving progress. Try again.");
-    }
-  });
+  const saveProgressBtn = document.getElementById("saveProgress");
+  if (saveProgressBtn) {
+    saveProgressBtn.onclick = async () => {
+      try {
+        await addDoc(collection(db, "leaderboard"), {
+          name: userName,
+          gpa: GPA.toFixed(2),
+          cgpa: CGPA.toFixed(2),
+          timestamp: new Date().toISOString(),
+        });
+        alert("✅ Progress saved successfully!");
+      } catch (e) {
+        console.error("Error saving progress:", e);
+        alert("❌ Error saving progress. Try again.");
+      }
+    };
+  }
 });
 
 // === Leaderboard ===
@@ -176,37 +182,35 @@ leaderboardBtn.addEventListener("click", async () => {
       return;
     }
 
-let rank = 1;
-snapshot.forEach((doc) => {
-  const data = doc.data();
-  let medal = "";
-  let color = "";
+    let rank = 1;
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      let medal = "";
+      let color = "";
 
-  if (rank === 1) {
-    medal = "🥇";
-    color = "#ffd700"; // gold
-  } else if (rank === 2) {
-    medal = "🥈";
-    color = "#c0c0c0"; // silver
-  } else if (rank === 3) {
-    medal = "🥉";
-    color = "#cd7f32"; // bronze
-  } else {
-    medal = "🏅";
-    color = "#00aaff"; // blue for others
-  }
+      if (rank === 1) {
+        medal = "🥇";
+        color = "#ffd700";
+      } else if (rank === 2) {
+        medal = "🥈";
+        color = "#c0c0c0";
+      } else if (rank === 3) {
+        medal = "🥉";
+        color = "#cd7f32";
+      } else {
+        medal = "🏅";
+        color = "#00aaff";
+      }
 
-  leaderboardDiv.innerHTML += `
-    <p style="color:${color}; font-weight:600;">
-      ${medal} ${rank}. ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}
-    </p>
-  `;
-  rank++;
-});
-
+      leaderboardDiv.innerHTML += `
+        <p style="color:${color}; font-weight:600;">
+          ${medal} ${rank}. ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}
+        </p>
+      `;
+      rank++;
+    });
   } catch (err) {
     console.error(err);
     leaderboardDiv.innerHTML += "<p>⚠️ Error loading leaderboard.</p>";
   }
 });
-
