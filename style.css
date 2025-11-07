@@ -140,5 +140,30 @@ canvas {
   to { opacity: 1; transform: translateY(0); }
 }
 
+.typing-box {
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap; /* keep it on one line */
+  overflow: hidden; /* hide text until typed */
+  border-right: 3px solid #fff; /* cursor effect */
+  width: 100%; /* expand to full container */
+  max-width: 100%; /* ensures no clipping */
+  margin-top: 15px;
+  animation: typing 3.5s steps(40, end) 1s 1 normal both, blink 0.75s step-end infinite;
+}
+
+/* Typing animation keyframes */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Cursor blink */
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
 
 
