@@ -48,6 +48,13 @@ button:hover {
 }
 
 .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.15);
+}
+.card {
   margin: 20px 0;
   padding: 15px;
   background: rgba(255,255,255,0.15);
@@ -75,3 +82,4 @@ canvas {
   border-radius: 8px; /* smooth edges */
   object-fit: contain;
 }
+
