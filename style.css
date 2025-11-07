@@ -83,5 +83,62 @@ canvas {
   object-fit: contain;
 }
 
+/* 🏆 Leaderboard styling */
+#leaderboard {
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.leaderboard-entry {
+  font-size: 1.1rem;
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.leaderboard-entry:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* 🎖 Top 3 Highlight Colors */
+.rank-1 {
+  background: linear-gradient(90deg, gold, #ffeb3b);
+  color: #222;
+  font-weight: 700;
+  box-shadow: 0 0 15px gold;
+}
+
+.rank-2 {
+  background: linear-gradient(90deg, silver, #e0e0e0);
+  color: #222;
+  font-weight: 700;
+  box-shadow: 0 0 15px silver;
+}
+
+.rank-3 {
+  background: linear-gradient(90deg, #cd7f32, #b87333);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 0 15px #cd7f32;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 
