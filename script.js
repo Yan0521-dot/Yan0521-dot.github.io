@@ -182,20 +182,12 @@ leaderboardBtn.addEventListener("click", async () => {
     let rank = 1;
     snapshot.forEach((doc) => {
       const data = doc.data();
-
-      let trophy = "";
+      let trophy = "🎖️";
       if (rank === 1) trophy = "🥇";
       else if (rank === 2) trophy = "🥈";
       else if (rank === 3) trophy = "🥉";
-      else trophy = `#${rank}`;
 
-      leaderboardDiv.innerHTML += `
-        <div class="leaderboard-item">
-          <span class="rank">${trophy}</span>
-          <span class="name">${data.name}</span>
-          <span class="score">GPA: ${data.gpa} | CGPA: ${data.cgpa}</span>
-        </div>
-      `;
+      leaderboardDiv.innerHTML += `<p>${trophy} ${rank}. ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}</p>`;
       rank++;
     });
   } catch (err) {
