@@ -26,7 +26,6 @@
       <label>Number of Subjects:</label>
       <input type="number" id="numSubjects" min="1" placeholder="e.g. 5" />
 
-      <!-- Removed Add Subjects button -->
       <div id="subjects"></div>
 
       <button id="calculateBtn" class="hidden">Calculate GPA & CGPA</button>
@@ -51,7 +50,7 @@
   <script type="module" src="script.js"></script>
 
   <script>
-    // Auto-show subject fields when number is entered
+    // Ask for subject names after number is entered
     document.getElementById("numSubjects").addEventListener("change", () => {
       const numSubjects = parseInt(document.getElementById("numSubjects").value);
       const subjectsDiv = document.getElementById("subjects");
@@ -64,8 +63,10 @@
         subjectsDiv.innerHTML += `
           <div class="subject">
             <h3>Subject ${i}</h3>
+            <input type="text" id="subjectName${i}" placeholder="Enter subject name..." />
             <input type="number" id="credit${i}" placeholder="Credit Hours" min="1" />
             <select id="grade${i}">
+              <option value="">Select Grade</option>
               <option value="4.00">A+</option>
               <option value="4.00">A</option>
               <option value="3.67">A-</option>
