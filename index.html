@@ -9,9 +9,10 @@
 </head>
 <body>
   <div class="container">
-       <div class="logo-container">
+    <div class="logo-container">
       <img src="unirazak_logo1.png" alt="UniRazak Logo" class="logo" />
     </div>
+
     <h1>📘 CGPA Progress Tracker</h1>
 
     <div id="name-section" class="card">
@@ -23,9 +24,9 @@
     <div id="cgpa-section" class="card hidden">
       <h2>Enter Your CGPA Details</h2>
       <label>Number of Subjects:</label>
-      <input type="number" id="numSubjects" min="1" />
-      <button id="addSubjects">Add Subjects</button>
+      <input type="number" id="numSubjects" min="1" placeholder="e.g. 5" />
 
+      <!-- Removed Add Subjects button -->
       <div id="subjects"></div>
 
       <button id="calculateBtn" class="hidden">Calculate GPA & CGPA</button>
@@ -41,12 +42,51 @@
       <canvas id="progressChart" class="hidden"></canvas>
     </div>
 
-    <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">💻 Made by <b>Aathityan</b> | For UniRazak Students ❤️</p>
+    <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">
+      💻 Made by <b>Aathityan</b> | For UniRazak Students ❤️
+    </p>
   </div>
 
   <!-- Firebase + App Logic -->
   <script type="module" src="script.js"></script>
+
+  <script>
+    // Auto-show subject fields when number is entered
+    document.getElementById("numSubjects").addEventListener("change", () => {
+      const numSubjects = parseInt(document.getElementById("numSubjects").value);
+      const subjectsDiv = document.getElementById("subjects");
+      const calculateBtn = document.getElementById("calculateBtn");
+
+      subjectsDiv.innerHTML = "";
+      if (!numSubjects || numSubjects <= 0) return;
+
+      for (let i = 1; i <= numSubjects; i++) {
+        subjectsDiv.innerHTML += `
+          <div class="subject">
+            <h3>Subject ${i}</h3>
+            <input type="number" id="credit${i}" placeholder="Credit Hours" min="1" />
+            <select id="grade${i}">
+              <option value="4.00">A+</option>
+              <option value="4.00">A</option>
+              <option value="3.67">A-</option>
+              <option value="3.33">B+</option>
+              <option value="3.00">B</option>
+              <option value="2.67">B-</option>
+              <option value="2.33">C+</option>
+              <option value="2.00">C</option>
+              <option value="1.67">C-</option>
+              <option value="1.33">D+</option>
+              <option value="1.00">D</option>
+              <option value="0.00">F</option>
+              <option value="S">S</option>
+              <option value="US">US</option>
+            </select>
+          </div>
+        `;
+      }
+
+      calculateBtn.classList.remove("hidden");
+    });
+  </script>
 </body>
 </html>
-
-
