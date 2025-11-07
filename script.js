@@ -9,7 +9,6 @@ import {
   limit,
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-// 🔹 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyBKGVgtx7YbjfGt7trWF3gcQ1r6NZtNKBw",
   authDomain: "cgpa-calculator-ur.firebaseapp.com",
@@ -20,11 +19,9 @@ const firebaseConfig = {
   measurementId: "G-277D7RMJLH",
 };
 
-// 🔹 Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// === UI Elements ===
 const nameSection = document.getElementById("name-section");
 const cgpaSection = document.getElementById("cgpa-section");
 const saveNameBtn = document.getElementById("save-name");
@@ -41,18 +38,15 @@ const leaderboardBtn = document.getElementById("leaderboard-btn");
 const leaderboardDiv = document.getElementById("leaderboard");
 const progressChart = document.getElementById("progressChart");
 
+let chartInstance = null;
 let userName = localStorage.getItem("username");
 
-// === Show name section only once ===
 if (userName) {
   nameSection.classList.add("hidden");
   cgpaSection.classList.remove("hidden");
   displayName.textContent = userName;
-} else {
-  cgpaSection.classList.add("hidden");
 }
 
-// === Save Name ===
 saveNameBtn.addEventListener("click", () => {
   const name = usernameInput.value.trim();
   if (!name) {
@@ -66,7 +60,6 @@ saveNameBtn.addEventListener("click", () => {
   cgpaSection.classList.remove("hidden");
 });
 
-// === Add Subjects ===
 addSubjectsBtn.addEventListener("click", () => {
   const numSubjects = parseInt(numSubjectsInput.value);
   subjectsDiv.innerHTML = "";
@@ -77,7 +70,7 @@ addSubjectsBtn.addEventListener("click", () => {
 
   for (let i = 1; i <= numSubjects; i++) {
     subjectsDiv.innerHTML += `
-      <div class="subject">
+      <div class="subject card">
         <h3>Subject ${i}</h3>
         <input type="number" id="credit${i}" placeholder="Credit Hours" min="1" />
         <select id="grade${i}">
@@ -99,11 +92,9 @@ addSubjectsBtn.addEventListener("click", () => {
       </div>
     `;
   }
-
   calculateBtn.classList.remove("hidden");
 });
 
-// === Calculate GPA / CGPA ===
 calculateBtn.addEventListener("click", async () => {
   let totalCredits = 0;
   let totalGradePoints = 0;
@@ -130,25 +121,35 @@ calculateBtn.addEventListener("click", async () => {
   gpaSpan.textContent = GPA.toFixed(2);
   cgpaSpan.textContent = CGPA.toFixed(2);
   resultDiv.classList.remove("hidden");
-  progressChart.classList.remove("hidden");
 
-  // Chart
+  // Smooth Doughnut Chart
   const ctx = progressChart.getContext("2d");
-  new Chart(ctx, {
-    type: "bar",
+  if (chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(ctx, {
+    type: "doughnut",
     data: {
       labels: ["GPA", "CGPA"],
       datasets: [
         {
-          label: `${userName}'s Progress`,
+          label: "Performance",
           data: [GPA, CGPA],
-          backgroundColor: ["#0044ff", "#00aaff"],
+          backgroundColor: ["#ff1e1e", "#ff6b6b"],
+          hoverOffset: 15,
         },
       ],
     },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: "#fff" } },
+      },
+      animation: {
+        animateRotate: true,
+        animateScale: true,
+      },
+    },
   });
 
-  // Save Progress to Firebase
   document.getElementById("saveProgress").addEventListener("click", async () => {
     try {
       await addDoc(collection(db, "leaderboard"), {
@@ -165,7 +166,6 @@ calculateBtn.addEventListener("click", async () => {
   });
 });
 
-// === Leaderboard ===
 leaderboardBtn.addEventListener("click", async () => {
   leaderboardDiv.classList.toggle("hidden");
   leaderboardDiv.innerHTML = "<h3>🏆 Top 10 Leaderboard</h3>";
@@ -179,9 +179,16 @@ leaderboardBtn.addEventListener("click", async () => {
       return;
     }
 
+    let rank = 1;
     snapshot.forEach((doc) => {
       const data = doc.data();
-      leaderboardDiv.innerHTML += `<p>👤 ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}</p>`;
+      let trophy = "🎖️";
+      if (rank === 1) trophy = "🥇";
+      else if (rank === 2) trophy = "🥈";
+      else if (rank === 3) trophy = "🥉";
+
+      leaderboardDiv.innerHTML += `<p>${trophy} ${rank}. ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}</p>`;
+      rank++;
     });
   } catch (err) {
     console.error(err);
