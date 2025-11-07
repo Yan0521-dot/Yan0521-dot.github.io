@@ -13,10 +13,26 @@ body {
   padding: 20px;
 }
 
-.logo {
-  width: 120px;
-  margin-bottom: 10px;
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
 }
+
+.logo {
+  width: 80px;        /* smaller size */
+  max-width: 25%;     /* responsive on smaller screens */
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 80, 80, 0.5);
+}
+
 
 h1 {
   font-size: 2rem;
@@ -120,3 +136,4 @@ canvas {
   padding: 15px;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
+
