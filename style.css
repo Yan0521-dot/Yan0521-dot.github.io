@@ -137,3 +137,35 @@ canvas {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
+.leaderboard-item {
+  display: flex;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin: 8px 0;
+  align-items: center;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.leaderboard-item:hover {
+  transform: scale(1.03);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.rank {
+  font-size: 1.4em;
+  margin-right: 10px;
+}
+
+.name {
+  flex: 1;
+  font-weight: bold;
+  color: #fff;
+}
+
+.score {
+  color: #ccc;
+  font-size: 0.9em;
+}
+
