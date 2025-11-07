@@ -1,15 +1,22 @@
 body {
-  background: #0a0a0a;
+  background: linear-gradient(135deg, #4b0000, #1a0000);
   color: #f1f1f1;
   font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
   text-align: center;
+  min-height: 100vh;
 }
 
 .container {
   padding: 20px;
   margin-top: 50px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 input, select, button {
@@ -18,21 +25,24 @@ input, select, button {
   border-radius: 10px;
   border: none;
   font-size: 16px;
+  outline: none;
 }
 
 input, select {
-  width: 200px;
+  width: 220px;
 }
 
 button {
-  background-color: #007bff;
+  background-color: #ff1e1e;
   color: white;
   cursor: pointer;
   transition: 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #ff4d4d;
+  transform: scale(1.05);
 }
 
 .hidden {
@@ -40,25 +50,80 @@ button:hover {
 }
 
 .subject {
-  background-color: #111;
+  background: rgba(255, 255, 255, 0.05);
   margin: 15px auto;
   padding: 20px;
-  border-radius: 12px;
-  max-width: 400px;
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.15);
+  border-radius: 18px;
+  max-width: 420px;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
 }
 
-.card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.subject:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 0 25px rgba(255, 50, 50, 0.5);
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 20px rgba(255, 0, 0, 0.15);
+#result {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 25px;
+  border-radius: 15px;
+  margin: 25px auto;
+  max-width: 450px;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+  animation: glowIn 1.2s ease-in-out;
+}
+
+@keyframes glowIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+canvas {
+  margin-top: 20px;
+  width: 280px !important;
+  height: 280px !important;
+}
+
+#leaderboard {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 450px;
+  margin: 20px auto;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+  transition: 0.4s ease;
+}
+
+#leaderboard h3 {
+  color: #ff6464;
 }
 
 #leaderboard p {
-  margin: 5px;
+  margin: 8px 0;
   font-size: 18px;
+  padding: 6px;
+  border-radius: 10px;
 }
 
+#leaderboard p:nth-child(2) {
+  background: rgba(255, 215, 0, 0.2);
+}
+
+#leaderboard p:nth-child(3) {
+  background: rgba(192, 192, 192, 0.2);
+}
+
+#leaderboard p:nth-child(4) {
+  background: rgba(205, 127, 50, 0.2);
+}
+
+.card {
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card:hover {
+  transform: scale(1.04) rotate(1deg);
+  box-shadow: 0 6px 25px rgba(255, 100, 100, 0.4);
+}
