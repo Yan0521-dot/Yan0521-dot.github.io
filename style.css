@@ -13,26 +13,10 @@ body {
   padding: 20px;
 }
 
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
 .logo {
-  width: 80px;        /* smaller size */
-  max-width: 25%;     /* responsive on smaller screens */
-  height: auto;
-  border-radius: 10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 120px;
+  margin-bottom: 10px;
 }
-
-.logo:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 80, 80, 0.5);
-}
-
 
 h1 {
   font-size: 2rem;
@@ -136,36 +120,3 @@ canvas {
   padding: 15px;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
-
-.leaderboard-item {
-  display: flex;
-  justify-content: space-between;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 10px 15px;
-  border-radius: 10px;
-  margin: 8px 0;
-  align-items: center;
-  transition: transform 0.2s ease, background 0.3s ease;
-}
-
-.leaderboard-item:hover {
-  transform: scale(1.03);
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.rank {
-  font-size: 1.4em;
-  margin-right: 10px;
-}
-
-.name {
-  flex: 1;
-  font-weight: bold;
-  color: #fff;
-}
-
-.score {
-  color: #ccc;
-  font-size: 0.9em;
-}
-
