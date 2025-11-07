@@ -176,12 +176,37 @@ leaderboardBtn.addEventListener("click", async () => {
       return;
     }
 
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      leaderboardDiv.innerHTML += `<p>👤 ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}</p>`;
-    });
+let rank = 1;
+snapshot.forEach((doc) => {
+  const data = doc.data();
+  let medal = "";
+  let color = "";
+
+  if (rank === 1) {
+    medal = "🥇";
+    color = "#ffd700"; // gold
+  } else if (rank === 2) {
+    medal = "🥈";
+    color = "#c0c0c0"; // silver
+  } else if (rank === 3) {
+    medal = "🥉";
+    color = "#cd7f32"; // bronze
+  } else {
+    medal = "🏅";
+    color = "#00aaff"; // blue for others
+  }
+
+  leaderboardDiv.innerHTML += `
+    <p style="color:${color}; font-weight:600;">
+      ${medal} ${rank}. ${data.name} — GPA: ${data.gpa} | CGPA: ${data.cgpa}
+    </p>
+  `;
+  rank++;
+});
+
   } catch (err) {
     console.error(err);
     leaderboardDiv.innerHTML += "<p>⚠️ Error loading leaderboard.</p>";
   }
 });
+
