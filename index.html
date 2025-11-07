@@ -3,91 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CGPA Progress Tracker</title>
+  <title>UR CGPA Tracker</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="logo-container">
-      <img src="unirazak_logo1.png" alt="UniRazak Logo" class="logo" />
-    </div>
-
-    <h1>📘 CGPA Progress Tracker</h1>
-
-    <div id="name-section" class="card">
-      <h2>Enter Your Name</h2>
-      <input type="text" id="username" placeholder="Your name..." />
-      <button id="save-name">Save Name</button>
-    </div>
-
-    <div id="cgpa-section" class="card hidden">
-      <h2>Enter Your CGPA Details</h2>
-      <label>Number of Subjects:</label>
-      <input type="number" id="numSubjects" min="1" placeholder="e.g. 5" />
-
-      <div id="subjects"></div>
-
-      <button id="calculateBtn" class="hidden">Calculate GPA & CGPA</button>
-      <button id="leaderboard-btn">🏆 View Leaderboard</button>
-      <div id="leaderboard" class="hidden"></div>
-
-      <div id="result" class="hidden">
-        <h3>Your GPA: <span id="gpa"></span></h3>
-        <h3>Your CGPA: <span id="cgpa"></span></h3>
-        <button id="saveProgress">Save Progress</button>
-      </div>
-
-      <canvas id="progressChart" class="hidden"></canvas>
-    </div>
-
-    <p style="margin-top: 20px; font-size: 14px; opacity: 0.8;">
-      💻 Made by <b>Aathityan</b> | For UniRazak Students ❤️
-    </p>
+  <div id="name-section" class="container">
+    <h1>Welcome to UR CGPA Tracker 🎓</h1>
+    <input type="text" id="username" placeholder="Enter your name" />
+    <button id="save-name">Continue</button>
   </div>
 
-  <!-- Firebase + App Logic -->
+  <div id="cgpa-section" class="container hidden">
+    <h2>Hello, <span id="displayName"></span> 👋</h2>
+    <input type="number" id="numSubjects" placeholder="How many subjects?" min="1" />
+    <button id="addSubjects">Add Subjects</button>
+    <div id="subjects"></div>
+    <button id="calculateBtn" class="hidden">Calculate CGPA</button>
+    <div id="result" class="hidden">
+      <h3>Your GPA: <span id="gpa">0.00</span></h3>
+      <h3>Your CGPA: <span id="cgpa">0.00</span></h3>
+      <canvas id="progressChart"></canvas>
+      <button id="saveProgress">Save Progress</button>
+    </div>
+
+    <button id="leaderboard-btn">🏆 View Leaderboard</button>
+    <div id="leaderboard" class="hidden"></div>
+  </div>
+
   <script type="module" src="script.js"></script>
-
-  <script>
-    // Ask for subject names after number is entered
-    document.getElementById("numSubjects").addEventListener("change", () => {
-      const numSubjects = parseInt(document.getElementById("numSubjects").value);
-      const subjectsDiv = document.getElementById("subjects");
-      const calculateBtn = document.getElementById("calculateBtn");
-
-      subjectsDiv.innerHTML = "";
-      if (!numSubjects || numSubjects <= 0) return;
-
-      for (let i = 1; i <= numSubjects; i++) {
-        subjectsDiv.innerHTML += `
-          <div class="subject">
-            <h3>Subject ${i}</h3>
-            <input type="text" id="subjectName${i}" placeholder="Enter subject name..." />
-            <input type="number" id="credit${i}" placeholder="Credit Hours" min="1" />
-            <select id="grade${i}">
-              <option value="">Select Grade</option>
-              <option value="4.00">A+</option>
-              <option value="4.00">A</option>
-              <option value="3.67">A-</option>
-              <option value="3.33">B+</option>
-              <option value="3.00">B</option>
-              <option value="2.67">B-</option>
-              <option value="2.33">C+</option>
-              <option value="2.00">C</option>
-              <option value="1.67">C-</option>
-              <option value="1.33">D+</option>
-              <option value="1.00">D</option>
-              <option value="0.00">F</option>
-              <option value="S">S</option>
-              <option value="US">US</option>
-            </select>
-          </div>
-        `;
-      }
-
-      calculateBtn.classList.remove("hidden");
-    });
-  </script>
 </body>
 </html>
