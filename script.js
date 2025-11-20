@@ -2,6 +2,12 @@ function checkPassword() {
     const pwd = document.getElementById("passwordInput").value;
     const strengthResult = document.getElementById("strengthResult");
 
+    if (!pwd) {
+        strengthResult.style.color = "red";
+        strengthResult.innerHTML = "Please enter a password 😭";
+        return;
+    }
+
     let score = 0;
 
     if (pwd.length >= 8) score++;
@@ -14,7 +20,6 @@ function checkPassword() {
     let color = "";
 
     switch (score) {
-        case 0:
         case 1:
             strength = "Very Weak";
             color = "red";
@@ -40,6 +45,7 @@ function checkPassword() {
     strengthResult.style.color = color;
     strengthResult.innerHTML = `Strength: <strong>${strength}</strong>`;
 }
+
 
 
 
@@ -132,3 +138,4 @@ function checkPhishing() {
         out.innerHTML = warnings.join("<br>");
     }
 }
+
