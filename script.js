@@ -43,50 +43,92 @@ function checkPassword() {
 
 
 
-// ----------------------
-// PHISHING LINK CHECKER
-// ----------------------
 function checkPhishing() {
-    const url = document.getElementById("urlInput").value;
-    const output = document.getElementById("phishingResult");
+    const input = document.getElementById("urlInput").value.trim();
+    const out = document.getElementById("phishingResult");
 
-    if (!url) {
-        output.innerHTML = "Please enter a URL.";
-        output.style.color = "orange";
+    if (!input) {
+        out.style.color = "orange";
+        out.innerHTML = "Please enter a URL.";
+        return;
+    }
+
+    let url = input;
+
+    // Add protocol if missing
+    if (!/^https?:\/\//i.test(url)) {
+        url = "http://" + url;
+    }
+
+    let domain;
+    try {
+        domain = new URL(url).hostname;
+    } catch {
+        out.style.color = "red";
+        out.innerHTML = "❌ Invalid URL format.";
         return;
     }
 
     let warnings = [];
 
-    // 1. Check for punycode
-    if (url.includes("xn--")) {
-        warnings.push("⚠️ Punycode detected (possible IDN homograph attack)");
+    // ❌ 1. No TLD (example: "hello" or "localhost")
+    if (!domain.includes(".")) {
+        warnings.push("⚠️ Missing TLD (.com, .my, .org)");
     }
 
-    // 2. Suspicious TLDs
-    const badTLDs = [".xyz", ".click", ".zip", ".top", ".loan"];
-    badTLDs.forEach(tld => {
-        if (url.endsWith(tld)) {
-            warnings.push(`⚠️ Suspicious TLD detected: ${tld}`);
+    // ❌ 2. Invalid TLD (like .8080)
+    const tld = domain.split(".").pop();
+    if (/^\d+$/.test(tld)) {
+        warnings.push(`⚠️ Invalid TLD: .${tld} (looks like a port)`);
+    }
+
+    // ❌ 3. Suspicious keywords
+    const susKeywords = [
+        "login", "verify", "update", "secure", 
+        "bonus", "freegift", "reward", "reset"
+    ];
+
+    susKeywords.forEach(k => {
+        if (url.toLowerCase().includes(k)) {
+            warnings.push(`⚠️ Suspicious keyword detected: "${k}"`);
         }
     });
 
-    // 3. IP-based URL
-    if (/https?:\/\/\d+\.\d+\.\d+\.\d+/.test(url)) {
-        warnings.push("⚠️ IP address instead of domain name");
+    // ❌ 4. Suspicious extensions
+    const badExtensions = [".exe", ".apk", ".zip", ".rar"];
+    badExtensions.forEach(ext => {
+        if (url.toLowerCase().endsWith(ext)) {
+            warnings.push(`⚠️ Dangerous file detected: ${ext}`);
+        }
+    });
+
+    // ❌ 5. Too many hyphens
+    if ((domain.match(/-/g) || []).length >= 3) {
+        warnings.push("⚠️ Excessive hyphens used — often phishing.");
     }
 
-    // 4. Too many hyphens
-    if ((url.match(/-/g) || []).length >= 3) {
-        warnings.push("⚠️ Multiple hyphens often used for fake URLs");
+    // ❌ 6. Punycode
+    if (domain.includes("xn--")) {
+        warnings.push("⚠️ Punycode detected (possible IDN homograph attack)");
     }
 
+    // ❌ 7. IP address instead of domain
+    if (/^\d+\.\d+\.\d+\.\d+$/.test(domain)) {
+        warnings.push("⚠️ IP address used instead of domain name.");
+    }
+
+    // ❌ 8. Suspicious TLD
+    const badTLDs = ["top", "xyz", "zip", "loan", "click"];
+    if (badTLDs.includes(tld)) {
+        warnings.push(`⚠️ Suspicious TLD: .${tld}`);
+    }
+
+    // Output
     if (warnings.length === 0) {
-        output.style.color = "#00ff99";
-        output.innerHTML = "✔️ This link looks **safe**, but always double-check!";
+        out.style.color = "#00ff99";
+        out.innerHTML = "✔️ No obvious phishing signs — but always stay alert.";
     } else {
-        output.style.color = "red";
-        output.innerHTML = warnings.join("<br>");
+        out.style.color = "red";
+        out.innerHTML = warnings.join("<br>");
     }
 }
-
