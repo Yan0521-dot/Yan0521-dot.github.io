@@ -1,86 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CGPA Tracker</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aathityan | Cybersecurity Projects</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="container">
-    <div class="logo-container">
-      <img src="unirazak_logo1.png" alt="UniRazak Logo" class="logo" />
-    </div>
+    <header>
+        <img src="yourphoto.jpg" alt="Aathityan" class="profile-pic">
 
-    <h1>📘 CGPA Tracker</h1>
-    <p class="subtitle">Made by <b>Aathityan</b> for UniRazak Students ❤️</p>
+        <h1>👨‍💻 Hi everyone, I'm Aathityan</h1>
+        <p>
+            In this website, you'll see projects that I did.  
+            I basically built everything from the knowledge that I gained.
+        </p>
+    </header>
 
-    <div id="name-section" class="card fade-in">
-      <h2>Enter Your Name</h2>
-      <input type="text" id="username" placeholder="Your name..." />
-      <button id="save-name">Save Name</button>
-    </div>
+    <section class="card">
+        <h2>📌 About Me</h2>
+        <p>
+            I’ve joined 4 CTFs so far — including a National-level CTF where I won 
+            <strong>1st place</strong>, organised by NADI x Cybersecurity.  
+            I also won <strong>2nd place</strong> in the NADI x Cybersecurity prelim round, 
+            and participated in Merdeka 3018 CTF and SunCTF.
+        </p>
 
-    <div id="cgpa-section" class="card hidden fade-in">
-      <h2>Enter Your CGPA Details</h2>
-      <label>Number of Subjects:</label>
-      <input type="number" id="numSubjects" min="1" placeholder="e.g. 5" />
+        <p>
+            I studied Computer Science from Form 4 to Form 5, then pursued Foundation in Arts.  
+            Now I’m doing my degree in IT majoring in <strong>Computer Forensics</strong>.
+        </p>
 
-      <div id="subjects"></div>
+        <p>
+            My ambition is to become a <strong>CISO (Chief Information Security Officer)</strong>.  
+            During my degree, I want to work in entry-level cybersecurity roles so when I do my internship,  
+            I’ll be more valuable to employers and already experienced.
+        </p>
 
-      <button id="calculateBtn" class="hidden">Calculate GPA & CGPA</button>
-      <button id="leaderboard-btn">🏆 View Leaderboard</button>
-      <div id="leaderboard" class="hidden leaderboard"></div>
+        <p>
+            After my studies, I want to become a <strong>Red Teamer / Pen Tester</strong>.  
+            That’s all about me :&gt;
+        </p>
+    </section>
 
-      <div id="result" class="hidden fade-in">
-        <h3>Your GPA: <span id="gpa"></span></h3>
-        <h3>Your CGPA: <span id="cgpa"></span></h3>
-        <button id="saveProgress">Save Progress</button>
-      </div>
+    <section class="card">
+        <h2>🔐 Password Strength Checker</h2>
+        <input type="password" id="passwordInput" placeholder="Enter a password...">
+        <div id="strengthResult"></div>
+    </section>
 
-      <canvas id="progressChart" class="hidden fade-in"></canvas>
-    </div>
-  </div>
+    <section class="card">
+        <h2>🕵️ Suspicious Link Checker</h2>
+        <input type="text" id="urlInput" placeholder="Paste a link to analyze...">
+        <button onclick="checkPhishing()">Check Link</button>
+        <div id="phishingResult"></div>
+    </section>
 
-  <script type="module" src="script.js"></script>
-
-  <script>
-    // Ask for subject names after number is entered
-    document.getElementById("numSubjects").addEventListener("change", () => {
-      const numSubjects = parseInt(document.getElementById("numSubjects").value);
-      const subjectsDiv = document.getElementById("subjects");
-      const calculateBtn = document.getElementById("calculateBtn");
-
-      subjectsDiv.innerHTML = "";
-      if (!numSubjects || numSubjects <= 0) return;
-
-      for (let i = 1; i <= numSubjects; i++) {
-        subjectsDiv.innerHTML += `
-          <div class="subject">
-            <h3>Subject ${i}</h3>
-            <input type="text" id="subjectName${i}" placeholder="Enter subject name..." />
-            <input type="number" id="credit${i}" placeholder="Credit Hours" min="1" />
-            <select id="grade${i}">
-              <option value="">Select Grade</option>
-              <option value="4.00">A+</option>
-              <option value="4.00">A</option>
-              <option value="3.67">A-</option>
-              <option value="3.33">B+</option>
-              <option value="3.00">B</option>
-              <option value="2.67">B-</option>
-              <option value="2.33">C+</option>
-              <option value="2.00">C</option>
-              <option value="1.67">C-</option>
-              <option value="1.33">D+</option>
-              <option value="1.00">D</option>
-              <option value="0.00">F</option>
-            </select>
-          </div>
-        `;
-      }
-      calculateBtn.classList.remove("hidden");
-    });
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
