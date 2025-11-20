@@ -1,11 +1,6 @@
-i// ----------------------
-// PASSWORD STRENGTH CHECKER
-// ----------------------
-const passwordInput = document.getElementById("passwordInput");
-const strengthResult = document.getElementById("strengthResult");
-
-passwordInput.addEventListener("input", () => {
-    const pwd = passwordInput.value;
+function checkPassword() {
+    const pwd = document.getElementById("passwordInput").value;
+    const strengthResult = document.getElementById("strengthResult");
 
     let score = 0;
 
@@ -44,7 +39,8 @@ passwordInput.addEventListener("input", () => {
 
     strengthResult.style.color = color;
     strengthResult.innerHTML = `Strength: <strong>${strength}</strong>`;
-});
+}
+
 
 
 // ----------------------
@@ -93,3 +89,4 @@ function checkPhishing() {
         output.innerHTML = warnings.join("<br>");
     }
 }
+
