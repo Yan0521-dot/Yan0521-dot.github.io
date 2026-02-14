@@ -1,162 +1,155 @@
-/* Base body */
+/* Root & Colors */
+:root {
+  --accent: hsl(183, 38%, 57%);
+  --shadow: hsl(10, 100%, 60%);
+  --header-height: 80px;
+}
+
+/* Body */
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Courier New', monospace;
-  background-color: #0b0b0b;
-  color: #ffffff;
-}
-
-/* Portfolio Header */
-.header {
-  width: 100%;
-  padding: 6rem 1rem 3rem;
+  font-family: 'Gloria Hallelujah', cursive;
+  background: #0a0a0a;
+  color: #fff;
   display: flex;
-  justify-content: center;
-  background: linear-gradient(135deg, #111, #1a1a1a);
-  box-shadow: 0 0 20px #4ade80aa;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.header-container {
-  text-align: center;
-}
-
-.header h1 {
-  font-size: 2.5rem;
-  margin: 0 0 0.5rem;
-  color: #4ade80;
-}
-
-.header p {
-  font-size: 1.2rem;
-  color: #aaffaa;
-}
-
-/* Cyber Header */
+/* Header */
 .cyber-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  width: 100%;
-  padding: 1rem 2rem;
-  position: relative;
+  align-items: center;
+  padding: 0 1rem;
+  height: var(--header-height);
   background: #111;
-  color: hsl(183 38% 57%);
-  box-shadow: 0 0 15px #4ade80aa;
-  z-index: 100;
+  border-bottom: 2px solid var(--accent);
+  position: relative;
 }
 
 .header-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  font-size: 1.5rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.ctf-flag {
-  font-family: 'Courier New', monospace;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-/* Burger button */
-.burger, .burger-btn {
+/* Burger Menu */
+#burgerBtn {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
   cursor: pointer;
 }
 
-.burger {
-  width: 24px;
-  height: 18px;
-  background: none;
-  border: none;
-}
-
-.burger-btn {
-  width: 40px;
-  height: 30px;
-}
-
-.burger span, .burger-btn span {
+#burgerBtn span {
   display: block;
-  height: 3px;
+  height: 4px;
   width: 100%;
-  background: #4ade80;
+  background: var(--accent);
   border-radius: 2px;
-  transition: 0.3s ease;
+  transition: 0.3s;
 }
 
-/* Active burger X animation */
-.burger-btn.active span:nth-child(1) {
-  transform: rotate(45deg) translate(6px, 6px);
+/* Burger Animation */
+#burgerBtn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
 }
-.burger-btn.active span:nth-child(2) { opacity: 0; }
-.burger-btn.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
+#burgerBtn.active span:nth-child(2) {
+  opacity: 0;
+}
+#burgerBtn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
 /* Menu */
-.menu {
-  position: fixed;
-  top: 60px;
-  right: 15px;
+#menu {
+  position: absolute;
+  top: var(--header-height);
+  right: 0;
   background: #111;
-  border: 2px solid #4ade80;
-  padding: 1rem;
+  width: 200px;
   display: none;
   flex-direction: column;
-  width: 200px;
-  text-align: center;
-  border-radius: 8px;
-  z-index: 999;
+  border-left: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  z-index: 100;
 }
 
-.menu.active { display: flex; }
+#menu.active {
+  display: flex;
+}
 
-.menu ul { list-style: none; margin: 0; padding: 0; }
-
-.menu li { margin: 0.8rem 0; }
-
-.menu a {
-  color: #4ade80;
+#menu a {
+  color: var(--accent);
   text-decoration: none;
-  font-size: 1.1rem;
-  transition: 0.2s;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #222;
+  transition: background 0.2s;
 }
 
-.menu a:hover { color: #00ff00; }
+#menu a:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
 
-/* Instruction block */
-.instruction {
-  position: absolute;
-  top: 4rem;
-  left: 50%;
-  transform: translateX(-50%);
-  color: hsl(183 38% 57%);
+/* Cyber Button */
+.cyber-btn {
+  --corner: 12px;
+  width: 140px;
+  text-align: left;
+  text-transform: uppercase;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.5rem 0.5rem;
+  border: 0;
+  background: transparent;
+  position: relative;
+  color: var(--accent);
+  cursor: pointer;
+  overflow: hidden;
 }
 
-.instruction svg {
-  width: 40px;
-  height: 40px;
+.cyber-btn .backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 255, 255, 0.1);
+  z-index: -1;
+  border-radius: var(--corner);
+  backdrop-filter: blur(4px);
 }
 
-.instruction span {
-  font-family: 'Gloria Hallelujah', cursive;
-  font-size: 1rem;
+/* Glitch Effect */
+.cyber-btn .glitch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
-/* Responsive */
-@media screen and (max-width: 600px) {
-  .header {
-    padding: 5rem 1rem 2rem;
-  }
-  .burger-btn { width: 35px; height: 25px; }
-  .menu { width: 160px; top: 50px; right: 10px; }
-  .instruction { top: 5rem; gap: 0.3rem; }
-  .instruction svg { width: 30px; height: 30px; }
-  .instruction span { font-size: 0.9rem; }
+.cyber-btn .glitch span {
+  position: absolute;
+  color: var(--accent);
+  font-weight: bold;
+  clip: rect(0, 100%, 0, 0);
+  animation: glitch 2s infinite linear alternate-reverse;
+}
+
+@keyframes glitch {
+  0% { clip: rect(0, 100%, 0, 0); transform: translate(0,0); }
+  10% { clip: rect(5px, 100%, 25px, 0); transform: translate(-2px,-2px);}
+  20% { clip: rect(10px, 100%, 30px, 0); transform: translate(2px,2px);}
+  30% { clip: rect(15px, 100%, 40px, 0); transform: translate(-2px,2px);}
+  40% { clip: rect(20px, 100%, 45px, 0); transform: translate(2px,-2px);}
+  50% { clip: rect(25px, 100%, 50px, 0); transform: translate(-1px,1px);}
+  60% { clip: rect(0, 100%, 0, 0); transform: translate(0,0);}
+  100% { clip: rect(0, 100%, 0, 0); transform: translate(0,0);}
 }
