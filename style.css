@@ -1,29 +1,36 @@
 body {
     background-color: #0d0d0d;
     color: #00ff00;
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
     font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0;
 }
 
-/* Terminal header */
+/* Terminal header full width */
+.terminal-header {
+    width: 100%;
+    padding: 2rem 1rem;
+    display: flex;
+    justify-content: center;
+}
+
 .terminal-container {
+    width: 100%;
+    max-width: 900px;
     background-color: #1e1e1e;
     padding: 1rem 1.5rem;
     border-radius: 8px;
     box-shadow: 0 0 20px #00ff00aa;
+    overflow-x: auto; /* allow scrolling on very small screens */
 }
 
 .terminal-line {
     color: #00ff00;
-    overflow: hidden;
     white-space: nowrap;
     border-right: 2px solid #00ff00;
-    animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+    animation: typing 3s steps(60, end), blink-caret 0.75s step-end infinite;
+    display: inline-block;
+    min-width: 100%; /* makes it stretch */
 }
 
 @keyframes typing {
@@ -32,37 +39,36 @@ body {
 }
 
 @keyframes blink-caret {
-    from, to { border-color: transparent; }
+    0%, 100% { border-color: transparent; }
     50% { border-color: #00ff00; }
 }
 
-.flex { display: flex; }
-.items-center { align-items: center; }
-.text-green-400 { color: #4ade80; }
-.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-.mr-2 { margin-right: 0.5rem; }
+/* Burger menu top-right */
+.burger-menu {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
 
-/* Burger menu styles remain unchanged from your previous CSS */
-
-/* Burger button */
 .burger-btn {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    width: 40px;       /* button width */
-    height: 30px;      /* button height */
+    width: 40px;
+    height: 30px;
     cursor: pointer;
+    z-index: 1001;
 }
 
 .burger-btn span {
     display: block;
     height: 4px;
-    background: #4ade80; /* green for terminal theme */
+    background: #4ade80;
     border-radius: 2px;
     transition: 0.3s ease;
 }
 
-/* Animate burger to X when active */
 .burger-btn.active span:nth-child(1) {
     transform: rotate(45deg) translate(5px, 5px);
 }
@@ -75,8 +81,8 @@ body {
 
 /* Menu styling */
 .menu {
-    position: fixed; /* important */
-    top: 60px;       /* below button */
+    position: fixed;
+    top: 60px; /* a little below top for spacing */
     right: 20px;
     background: #111;
     border: 2px solid #4ade80;
@@ -85,7 +91,7 @@ body {
     flex-direction: column;
     width: 180px;
     text-align: center;
-    z-index: 1001;
+    z-index: 999;
 }
 
 .menu.active {
@@ -106,4 +112,20 @@ body {
     color: #4ade80;
     text-decoration: none;
     font-size: 1.1rem;
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 600px) {
+    .terminal-container {
+        padding: 0.8rem 1rem;
+    }
+    .burger-btn {
+        width: 35px;
+        height: 25px;
+    }
+    .menu {
+        width: 150px;
+        top: 55px;
+        right: 15px;
+    }
 }
