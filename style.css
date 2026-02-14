@@ -1,16 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 /* Base */
-body {
+body, html {
   margin: 0;
+  padding: 0;
   font-family: 'VT323', monospace;
   background: #000;
-  color: #0ff;
+  color: #53f36e; /* neon green */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
   min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Canvas full-screen */
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 
 header {
@@ -21,7 +33,7 @@ header {
 /* Glitch titles */
 .glitch-title, .glitch-subtitle {
   position: relative;
-  color: #0ff;
+  color: #53f36e;
   font-weight: bold;
 }
 
@@ -41,13 +53,13 @@ header {
 .glitch-title::before,
 .glitch-subtitle::before {
   animation: glitchTop 2s infinite linear alternate-reverse;
-  color: #f0f;
+  color: #0f0;
 }
 
 .glitch-title::after,
 .glitch-subtitle::after {
   animation: glitchBottom 2s infinite linear alternate-reverse;
-  color: #0ff;
+  color: #53f36e;
 }
 
 @keyframes glitchTop {
@@ -71,6 +83,7 @@ header {
 /* Burger button */
 .burger-menu {
   position: relative;
+  margin-top: 20px;
 }
 
 .burger-btn {
@@ -86,7 +99,7 @@ header {
 .burger-btn span {
   display: block;
   height: 5px;
-  background: #0ff;
+  background: #53f36e;
   border-radius: 2px;
   transition: 0.3s ease;
 }
@@ -108,12 +121,13 @@ header {
   top: 50px;
   right: 0;
   background: #111;
-  border: 2px solid #0ff;
+  border: 2px solid #53f36e;
   padding: 1rem;
   display: none;
   flex-direction: column;
   width: 200px;
   text-align: center;
+  z-index: 10;
 }
 
 .menu.active {
@@ -132,17 +146,15 @@ header {
 }
 
 .menu a {
-  color: #0ff;
+  color: #53f36e;
   text-decoration: none;
   font-size: 1.2rem;
-  position: relative;
 }
 
 .menu a:hover {
-  color: #f0f;
+  color: #0f0;
 }
 
-/* Optional glitch flicker effect on menu */
 @keyframes glitchMenu {
   0% { transform: translate(0,0); }
   20% { transform: translate(-2px, 2px); }
@@ -151,4 +163,3 @@ header {
   80% { transform: translate(1px, -2px); }
   100% { transform: translate(0,0); }
 }
-
