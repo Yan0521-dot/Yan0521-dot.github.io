@@ -1,11 +1,17 @@
 // INTRO ANIMATION
-
 window.onload = () => {
     setTimeout(() => {
-        document.getElementById("intro").style.display = "none";
-        document.getElementById("mainSite").style.display = "block";
+        const intro = document.getElementById("intro");
+        intro.style.opacity = "0";
+
+        setTimeout(() => {
+            intro.style.display = "none";
+            document.getElementById("mainSite").style.display = "block";
+        }, 800);
+
     }, 2500);
 };
+
 
 function checkPassword() {
     const pwd = document.getElementById("passwordInput").value;
@@ -154,4 +160,5 @@ function checkPhishing() {
         out.innerHTML = warnings.join("<br>");
     }
 }
+
 
