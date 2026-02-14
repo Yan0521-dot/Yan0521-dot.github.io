@@ -7,16 +7,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="canvas"></canvas>
 
-  <header>
-    <h1 class="glitch-title" data-text="Aathityan">Aathityan</h1>
-    <h2 class="glitch-subtitle" data-text="Hi, I'm Aathityan
-Cybersecurity Student | CTF Player | Future Red Teamer">
-      Hi, I'm Aathityan<br>Cybersecurity Student | CTF Player | Red Teamer
-    </h2>
-  </header>
+  <!-- Terminal-style header -->
+  <div class="flex items-center" style="margin-top: 2rem;">
+    <div class="terminal-container">
+      <span class="text-green-400 text-lg mr-2">hello user&gt;</span>
+      <div class="terminal-line" id="hacking-animation">initializing...</div>
+    </div>
+  </div>
 
+  <!-- Burger menu -->
   <main>
     <div class="burger-menu">
       <div class="burger-btn" id="burgerBtn">
@@ -36,6 +36,6 @@ Cybersecurity Student | CTF Player | Future Red Teamer">
     </div>
   </main>
 
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
