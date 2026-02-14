@@ -149,3 +149,9 @@ button {
   80% { transform: skew(-1deg); }
   100% { transform: skew(0deg); }
 }
+
+#intro {
+    transition: opacity 0.8s ease;
+}
+
+
