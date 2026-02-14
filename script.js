@@ -1,29 +1,17 @@
-import TubesCursor from "https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js"
+// Terminal animation for the header
+const commands = [
+    "initializing...",
+    "scanning_systems.sh --target=127.0.0.1",
+    "decrypting_ciphertext.py --algo=AES256",
+    "bypassing_firewall.exe --port=443",
+    "root@kali:~# rm -rf / --no-preserve-root"
+];
 
-// Full-screen tubes cursor (default colors)
-const app = TubesCursor(document.getElementById('canvas'), {
-  tubes: {
-    colors: ["#f967fb", "#53bc28", "#6958d5"],
-    lights: {
-      intensity: 200,
-      colors: ["#83f36e", "#fe8a2e", "#ff008a", "#60aed5"]
-    }
-  }
-});
-
-// Randomize tube colors on click
-document.body.addEventListener('click', () => {
-  const colors = randomColors(3);
-  const lightsColors = randomColors(4);
-  app.tubes.setColors(colors);
-  app.tubes.setLightsColors(lightsColors);
-});
-
-function randomColors (count) {
-  return new Array(count)
-      .fill(0)
-      .map(() => "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'));
-}
+let index = 0;
+setInterval(() => {
+    document.getElementById("hacking-animation").textContent = commands[index];
+    index = (index + 1) % commands.length;
+}, 3000);
 
 // Burger menu toggle
 const burgerBtn = document.getElementById('burgerBtn');
