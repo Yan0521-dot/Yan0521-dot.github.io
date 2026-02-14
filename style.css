@@ -173,4 +173,48 @@ button {
     opacity: 0.8;
 }
 
+/* HAMBURGER */
+
+.menu-toggle {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #00ff99;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    nav {
+        padding: 15px 20px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    nav ul {
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: #050505;
+        flex-direction: column;
+        width: 200px;
+        text-align: center;
+        border-left: 1px solid #00ff99;
+        border-bottom: 1px solid #00ff99;
+        display: none;
+    }
+
+    nav ul.active {
+        display: flex;
+    }
+
+    nav ul li {
+        padding: 15px 0;
+    }
+}
+
+
 
