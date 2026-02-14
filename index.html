@@ -2,95 +2,187 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aathityan Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+  <title>UR_CYBER{F0RC3}</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap">
   <style>
-    /* Basic styling for headers and burger */
-    body { margin:0; font-family:sans-serif; }
+    /* Root & Colors */
+    :root {
+      --accent: hsl(183, 38%, 57%);
+      --shadow: hsl(10, 100%, 60%);
+      --header-height: 80px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Cyber', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
     .cyber-header {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:10px 20px;
-      background:#111;
-      color:#0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+      height: var(--header-height);
+      background: #111;
+      border-bottom: 2px solid var(--accent);
+      position: relative;
     }
-    .ctf-flag { font-weight:bold; font-size:1.2em; }
-    .burger {
-      display:flex;
-      flex-direction:column;
-      justify-content:space-around;
-      width:25px;
-      height:20px;
-      background:none;
-      border:none;
-      cursor:pointer;
+
+    .cyber-header .header-left {
+      font-family: 'Gloria Hallelujah', cursive;
+      font-size: 1.5rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    .burger span {
-      display:block;
-      height:3px;
-      background:#0f0;
-      border-radius:2px;
+
+    /* Burger */
+    #burgerBtn {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 22px;
+      cursor: pointer;
     }
-    .menu {
-      display:none;
-      position:absolute;
-      top:60px;
-      right:20px;
-      background:#222;
-      padding:10px;
-      border-radius:5px;
+
+    #burgerBtn span {
+      display: block;
+      height: 4px;
+      width: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: 0.3s;
     }
-    .menu ul { list-style:none; margin:0; padding:0; }
-    .menu ul li { margin:10px 0; }
-    .menu ul li a { color:#0f0; text-decoration:none; }
-    .menu.show { display:block; }
-    .instruction { display:flex; align-items:center; gap:10px; }
-    .instruction svg { width:30px; height:30px; fill:currentColor; }
+
+    /* Burger toggle animation */
+    #burgerBtn.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    #burgerBtn.active span:nth-child(2) {
+      opacity: 0;
+    }
+    #burgerBtn.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Menu */
+    #menu {
+      position: absolute;
+      top: var(--header-height);
+      right: 0;
+      background: #111;
+      width: 200px;
+      display: none;
+      flex-direction: column;
+      border-left: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    #menu.active {
+      display: flex;
+    }
+
+    #menu a {
+      color: var(--accent);
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #222;
+      transition: background 0.2s;
+    }
+
+    #menu a:hover {
+      background: rgba(0, 255, 255, 0.1);
+    }
+
+    /* Cyber Button Example */
+    .cyber-btn {
+      --corner: 12px;
+      --border: 1px;
+      width: 140px;
+      text-align: left;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.5rem;
+      border: 0;
+      background: #0000;
+      position: relative;
+      color: var(--accent);
+      cursor: pointer;
+    }
+
+    .cyber-btn .backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 255, 255, 0.1);
+      z-index: -1;
+      border-radius: var(--corner);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Glitch text */
+    .cyber-btn .glitch span {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    /* Main content example */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      color: var(--accent);
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- Cyber Header -->
   <header class="cyber-header">
-    <div class="header-left">
-      <span class="ctf-flag">UR_CYBER{F0RC3}</span>
-      <button class="burger" id="burgerBtn" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+    <div class="header-left">UR_CYBER{F0RC3}</div>
+    <div id="burgerBtn">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
-    <div class="instruction">
-      <svg viewBox="0 0 144 141" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" 
-          d="M129.189 0.0490494C128.744 0.119441 126.422 0.377545 124.03 0.635648C114.719 1.6446 109.23 2.4893 108.058 3.09936C107.119 3.56864 106.674 4.34295 106.674 5.44576C106.674 6.71281 107.424 7.51058 109.043 7.97986C110.403 8.37875 110.825 8.42567 118.87 9.52847C121.778 9.92736 124.288 10.3028 124.475 10.3732C124.663 10.4436 122.951 11.1006 120.676 11.8749C110.028 15.4414 100.412 20.7677 91.7339 27.9242C88.38 30.7164 81.6957 37.4271 79.2096 40.5009C73.8387 47.2116 69.6874 54.8139 66.5681 63.7302C65.9348 65.4665 65.3484 66.8978 65.2546 66.8978C65.1374 66.8978 63.7771 66.7336 62.2291 66.5693C52.9649 65.5134 43.1847 68.1649 34.1316 74.2186C24.7735 80.46 18.5349 87.7338 10.5371 101.742C2.53943 115.726 -1.0959 127.482 0.287874 135.014C0.89767 138.463 2.0469 140.035 3.97011 140.082C5.28352 140.105 5.37733 139.659 4.20465 139.049C3.05541 138.463 2.6567 137.9 2.32835 136.281C0.616228 128.021 6.24512 113.028 17.4325 96.1104C23.2725 87.241 28.362 81.9147 35.5622 77.1046C43.8649 71.5437 52.7069 69.033 61.1737 69.8308C64.9967 70.1828 64.6917 69.9247 64.1992 72.4822C62.2525 82.5013 63.8005 92.6378 67.9753 97.354C73.1116 103.079 81.9771 102 85.0027 95.2657C86.3395 92.2858 86.3864 87.7103 85.1434 83.9796C83.1498 78.0901 80.007 73.8197 75.4335 70.8163C73.8152 69.7604 70.4848 68.1883 69.875 68.1883C69.359 68.1883 69.4294 67.6487 70.2268 65.3257C72.3377 59.2486 75.457 52.7021 78.4122 48.244C83.2436 40.9232 91.4524 32.5701 99.1687 27.103C105.806 22.4102 113.241 18.5386 120.512 16.0045C123.772 14.8548 129.87 13.1889 130.081 13.3766C130.128 13.447 129.541 14.362 128.791 15.4414C124.78 21.0258 122.716 26.0706 122.388 30.998C122.224 33.7198 122.341 34.588 122.88 34.2595C122.998 34.1891 123.678 32.969 124.405 31.5611C126.281 27.8069 131.722 20.6738 139.579 11.6402C141.127 9.85697 142.652 7.86254 143.027 7.08823C144.552 4.03792 143.52 1.48035 140.377 0.471397C139.439 0.166366 138.102 0.0490408 134.584 0.0255769C132.074 -0.021351 129.635 0.00212153 129.189 0.0490494Z"
-          fill="currentColor"></path>
-      </svg>
-      <span>Use this!</span>
-    </div>
+    <nav id="menu">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
   </header>
 
-  <!-- Hidden Menu -->
-  <nav class="menu" id="menu">
-    <ul>
-      <li><a href="#home">Home</a></li>
-      <li><a href="#certificate">Certificate</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#social">Social</a></li>
-      <li><a href="#community">Community</a></li>
-    </ul>
-  </nav>
+  <main>
+    <button class="cyber-btn">
+      <span class="backdrop"></span>
+      <kbd>U</kbd>
+      <span>Upgrade</span>
+      <div class="glitch" aria-hidden="true">
+        <span class="letters">
+          <span>U</span><span>p</span><span>g</span><span>r</span><span>a</span><span>d</span><span>e</span>
+        </span>
+      </div>
+    </button>
+  </main>
 
   <script>
     const burgerBtn = document.getElementById('burgerBtn');
     const menu = document.getElementById('menu');
+
     burgerBtn.addEventListener('click', () => {
-      menu.classList.toggle('show');
+      burgerBtn.classList.toggle('active');
+      menu.classList.toggle('active');
     });
   </script>
-
 </body>
 </html>
-
