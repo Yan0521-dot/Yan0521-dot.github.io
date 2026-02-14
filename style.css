@@ -7,7 +7,7 @@ body {
   color: #ffffff;
 }
 
-/* Header */
+/* Portfolio Header */
 .header {
   width: 100%;
   padding: 6rem 1rem 3rem;
@@ -32,26 +32,55 @@ body {
   color: #aaffaa;
 }
 
-/* Burger menu */
-.burger-menu {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 1000;
+/* Cyber Header */
+.cyber-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 2rem;
+  position: relative;
+  background: #111;
+  color: hsl(183 38% 57%);
+  box-shadow: 0 0 15px #4ade80aa;
+  z-index: 100;
 }
 
-.burger-btn {
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ctf-flag {
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Burger button */
+.burger, .burger-btn {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 40px;
-  height: 30px;
   cursor: pointer;
 }
 
-.burger-btn span {
+.burger {
+  width: 24px;
+  height: 18px;
+  background: none;
+  border: none;
+}
+
+.burger-btn {
+  width: 40px;
+  height: 30px;
+}
+
+.burger span, .burger-btn span {
   display: block;
-  height: 4px;
+  height: 3px;
   width: 100%;
   background: #4ade80;
   border-radius: 2px;
@@ -98,6 +127,28 @@ body {
 
 .menu a:hover { color: #00ff00; }
 
+/* Instruction block */
+.instruction {
+  position: absolute;
+  top: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: hsl(183 38% 57%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.instruction svg {
+  width: 40px;
+  height: 40px;
+}
+
+.instruction span {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 1rem;
+}
+
 /* Responsive */
 @media screen and (max-width: 600px) {
   .header {
@@ -105,4 +156,7 @@ body {
   }
   .burger-btn { width: 35px; height: 25px; }
   .menu { width: 160px; top: 50px; right: 10px; }
+  .instruction { top: 5rem; gap: 0.3rem; }
+  .instruction svg { width: 30px; height: 30px; }
+  .instruction span { font-size: 0.9rem; }
 }
