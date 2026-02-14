@@ -1,76 +1,132 @@
 body {
-    background: #0f0f0f;
+    margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    color: #eaeaea;
-    margin: 0;
-    padding: 20px;
+    background: black;
+    color: white;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 30px;
+/* NAVBAR */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: #050505;
+    border-bottom: 1px solid #00ff99;
+    position: sticky;
+    top: 0;
 }
 
-h1 {
-    font-size: 2.8rem;
-    margin: 0;
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
     color: #00ff99;
 }
 
-p {
-    opacity: 0.8;
+.logo {
+    color: #00ff99;
 }
 
+/* SECTIONS */
+
+.section {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+/* CARDS */
+
 .card {
-    background: #1a1a1a;
+    background: #111;
     padding: 20px;
     margin: 20px auto;
-    border-radius: 12px;
-    max-width: 600px;
-    box-shadow: 0 0 15px rgba(0,255,150,0.15);
+    border-radius: 10px;
+    max-width: 500px;
+    box-shadow: 0 0 15px rgba(0,255,150,0.2);
 }
 
 input {
-    width: 100%;
-    padding: 12px;
+    width: 90%;
+    padding: 10px;
     margin-top: 10px;
-    border-radius: 8px;
+    background: #222;
     border: none;
-    outline: none;
-    background: #262626;
     color: white;
+    border-radius: 6px;
 }
 
 button {
     margin-top: 10px;
-    padding: 12px 18px;
-    border: none;
+    padding: 10px 16px;
     background: #00ff99;
-    color: black;
-    font-weight: bold;
-    border-radius: 8px;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
 }
 
-button:hover {
-    background: #00e88a;
+/* INTRO SCREEN */
+
+#intro {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
 }
 
-#strengthResult, #phishingResult {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 8px;
-}
-.profile-pic {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-    border: 3px solid #00ff99;
-}
-#strengthResult {
-    background: #111;
-    border: 1px solid #333;
+.intro-box {
+    border: 1px solid #00ff99;
+    padding: 40px;
+    text-align: center;
 }
 
+/* GLITCH EFFECT */
+
+.glitch {
+    color: #00ff99;
+    font-size: 2.5rem;
+    position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.glitch::before {
+    animation: glitchTop 1s infinite;
+    color: red;
+}
+
+.glitch::after {
+    animation: glitchBottom 1s infinite;
+    color: blue;
+}
+
+@keyframes glitchTop {
+    0% { clip-path: inset(0 0 50% 0); }
+    50% { clip-path: inset(10% 0 40% 0); }
+    100% { clip-path: inset(0 0 50% 0); }
+}
+
+@keyframes glitchBottom {
+    0% { clip-path: inset(50% 0 0 0); }
+    50% { clip-path: inset(40% 0 10% 0); }
+    100% { clip-path: inset(50% 0 0 0); }
+}
