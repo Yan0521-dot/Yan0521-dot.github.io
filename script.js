@@ -1,3 +1,12 @@
+// INTRO ANIMATION
+
+window.onload = () => {
+    setTimeout(() => {
+        document.getElementById("intro").style.display = "none";
+        document.getElementById("mainSite").style.display = "block";
+    }, 2500);
+};
+
 function checkPassword() {
     const pwd = document.getElementById("passwordInput").value;
     const strengthResult = document.getElementById("strengthResult");
@@ -145,3 +154,4 @@ function checkPhishing() {
         out.innerHTML = warnings.join("<br>");
     }
 }
+
