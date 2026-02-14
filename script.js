@@ -3,7 +3,7 @@ const commands = [
     "initializing...",
     "scanning_systems.sh --target=127.0.0.1",
     "decrypting_ciphertext.py --algo=AES256",
-    "bypassing_firewall.exe --port=443",
+    "complete...",
     "root@kali:~# rm -rf / --no-preserve-root"
 ];
 
@@ -21,3 +21,4 @@ burgerBtn.addEventListener('click', () => {
   burgerBtn.classList.toggle('active');
   menu.classList.toggle('active');
 });
+
