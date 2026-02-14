@@ -1,102 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aathityan | Cybersecurity</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aathityan Portfolio</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <header>
+    <h1 class="glitch-title" data-text="Aathityan">Aathityan</h1>
+    <h2 class="glitch-subtitle" data-text="Hi, I'm Aathityan
+Cybersecurity Student | CTF Player | Future Red Teamer">
+      Hi, I'm Aathityan<br>Cybersecurity Student | CTF Player | Future Red Teamer
+    </h2>
+  </header>
 
-<!-- INTRO SCREEN -->
-<div id="intro">
-    <div class="intro-box">
-        <h1 class="glitch" data-text="ACCESS GRANTED">ACCESS GRANTED</h1>
-        <p>Initializing Cyber Portfolio...</p>
-    </div>
-</div>
+  <main>
+    <button class="cyber-btn">
+      <span class="backdrop">
+        <span class="corner"></span>
+      </span>
+      <kbd>U</kbd>
+      <span>Upgrade</span>
+      <div class="glitch" aria-hidden="true">
+        <span class="backdrop">
+          <span class="corner"></span>
+        </span>
+        <kbd>U</kbd>
+        <span class="letters">
+          <span>U</span>
+          <span>p</span>
+          <span>g</span>
+          <span>r</span>
+          <span>a</span>
+          <span>d</span>
+          <span>e</span>
+        </span>
+      </div>
+    </button>
+  </main>
 
-<!-- MAIN SITE -->
-<div id="mainSite" style="display:none;">
-
-<nav>
-    <h2 class="logo">AATHITYAN</h2>
-
-    <!-- HAMBURGER -->
-    <div class="menu-toggle" onclick="toggleMenu()">
-        ☰
-    </div>
-
-    <ul id="navLinks">
-        <li><a href="#home" onclick="closeMenu()">Home</a></li>
-        <li><a href="#about" onclick="closeMenu()">About</a></li>
-        <li><a href="#certificates" onclick="closeMenu()">Certificates</a></li>
-        <li><a href="#community" onclick="closeMenu()">Community</a></li>
-        <li><a href="#social" onclick="closeMenu()">Social</a></li>
-    </ul>
-</nav>
-
-
-    <!-- HERO -->
-    <section class="hero">
-        <h1>Hi, I'm Aathityan</h1>
-        <p>Cybersecurity Student | CTF Player | Future Red Teamer</p>
-    </section>
-
-    <!-- HOME -->
-    <section id="home" class="section">
-        <h1>👨‍💻 Tools</h1>
-
-        <div class="card">
-            <h2>🔐 Password Strength Checker</h2>
-            <input type="password" id="passwordInput" placeholder="Enter password">
-            <button onclick="checkPassword()">Check</button>
-            <div id="strengthResult"></div>
-        </div>
-
-        <div class="card">
-            <h2>🕵️ Suspicious Link Checker</h2>
-            <input type="text" id="urlInput" placeholder="Enter URL">
-            <button onclick="checkPhishing()">Check</button>
-            <div id="phishingResult"></div>
-        </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" class="section">
-        <h2>About Me</h2>
-        <p>
-            I’ve joined multiple CTF competitions including national level events.
-            My goal is to become a Red Teamer and eventually a CISO.
-        </p>
-    </section>
-
-    <!-- CERTIFICATES -->
-    <section id="certificates" class="section">
-        <h2>Certificates</h2>
-        <p>Certificates will appear here.</p>
-    </section>
-
-    <!-- COMMUNITY -->
-    <section id="community" class="section">
-        <h2>My Community</h2>
-        <p>Community info here.</p>
-    </section>
-
-    <!-- SOCIAL -->
-    <section id="social" class="section">
-        <h2>Social Media</h2>
-        <p>Links will appear here.</p>
-    </section>
-
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
