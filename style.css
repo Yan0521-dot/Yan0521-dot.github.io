@@ -46,8 +46,8 @@ body {
 /* Burger menu top-right */
 .burger-menu {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
     z-index: 1000;
 }
 
@@ -83,7 +83,7 @@ body {
 .menu {
     position: fixed;
     top: 60px; /* a little below top for spacing */
-    right: 20px;
+    right: 10px;
     background: #111;
     border: 2px solid #4ade80;
     padding: 1rem;
@@ -119,13 +119,16 @@ body {
     .terminal-container {
         padding: 0.8rem 1rem;
     }
+
     .burger-btn {
         width: 35px;
         height: 25px;
     }
+
     .menu {
         width: 150px;
-        top: 55px;
-        right: 15px;
+        top: 45px;   /* always relative to top of viewport */
+        right: 10px;
     }
 }
+
