@@ -1,12 +1,12 @@
 import TubesCursor from "https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js"
 
-// Tubes cursor with neon green colors
+// Full-screen tubes cursor (default colors)
 const app = TubesCursor(document.getElementById('canvas'), {
   tubes: {
-    colors: ["#53f36e", "#39ff14", "#00ff80"],
+    colors: ["#f967fb", "#53bc28", "#6958d5"],
     lights: {
       intensity: 200,
-      colors: ["#53f36e", "#39ff14", "#00ff80", "#00ff00"]
+      colors: ["#83f36e", "#fe8a2e", "#ff008a", "#60aed5"]
     }
   }
 });
