@@ -6,11 +6,7 @@ body, html {
   padding: 0;
   font-family: 'VT323', monospace;
   background: #000;
-  color: #53f36e; /* neon green */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
+  color: #53f36e; /* only text in green */
   min-height: 100vh;
   overflow: hidden;
 }
@@ -22,12 +18,14 @@ body, html {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -1; /* behind all content */
 }
 
 header {
   text-align: center;
   margin: 2rem 0;
+  z-index: 5;
+  position: relative;
 }
 
 /* Glitch titles */
@@ -53,7 +51,7 @@ header {
 .glitch-title::before,
 .glitch-subtitle::before {
   animation: glitchTop 2s infinite linear alternate-reverse;
-  color: #0f0;
+  color: #f0f; /* optional secondary color */
 }
 
 .glitch-title::after,
@@ -62,28 +60,14 @@ header {
   color: #53f36e;
 }
 
-@keyframes glitchTop {
-  0% { clip: rect(0,9999px,0,0); transform: translate(-2px,-2px);}
-  20% { clip: rect(2px,9999px,5px,0); transform: translate(2px,2px);}
-  40% { clip: rect(5px,9999px,10px,0); transform: translate(-1px,-1px);}
-  60% { clip: rect(8px,9999px,12px,0); transform: translate(1px,1px);}
-  80% { clip: rect(10px,9999px,14px,0); transform: translate(-2px,2px);}
-  100% { clip: rect(0,9999px,0,0); transform: translate(0,0);}
-}
-
-@keyframes glitchBottom {
-  0% { clip: rect(0,9999px,0,0); transform: translate(2px,2px);}
-  20% { clip: rect(5px,9999px,10px,0); transform: translate(-2px,-2px);}
-  40% { clip: rect(8px,9999px,12px,0); transform: translate(1px,1px);}
-  60% { clip: rect(2px,9999px,5px,0); transform: translate(-1px,-1px);}
-  80% { clip: rect(10px,9999px,14px,0); transform: translate(2px,-2px);}
-  100% { clip: rect(0,9999px,0,0); transform: translate(0,0);}
-}
+@keyframes glitchTop { 0% { clip: rect(0,9999px,0,0); transform: translate(-2px,-2px);} 20% { clip: rect(2px,9999px,5px,0); transform: translate(2px,2px);} 40% { clip: rect(5px,9999px,10px,0); transform: translate(-1px,-1px);} 60% { clip: rect(8px,9999px,12px,0); transform: translate(1px,1px);} 80% { clip: rect(10px,9999px,14px,0); transform: translate(-2px,2px);} 100% { clip: rect(0,9999px,0,0); transform: translate(0,0);} }
+@keyframes glitchBottom { 0% { clip: rect(0,9999px,0,0); transform: translate(2px,2px);} 20% { clip: rect(5px,9999px,10px,0); transform: translate(-2px,-2px);} 40% { clip: rect(8px,9999px,12px,0); transform: translate(1px,1px);} 60% { clip: rect(2px,9999px,5px,0); transform: translate(-1px,-1px);} 80% { clip: rect(10px,9999px,14px,0); transform: translate(2px,-2px);} 100% { clip: rect(0,9999px,0,0); transform: translate(0,0);} }
 
 /* Burger button */
 .burger-menu {
   position: relative;
   margin-top: 20px;
+  z-index: 5;
 }
 
 .burger-btn {
@@ -105,15 +89,9 @@ header {
 }
 
 /* Animate burger to X when active */
-.burger-btn.active span:nth-child(1) {
-  transform: rotate(45deg) translate(7px, 7px);
-}
-.burger-btn.active span:nth-child(2) {
-  opacity: 0;
-}
-.burger-btn.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
-}
+.burger-btn.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px);}
+.burger-btn.active span:nth-child(2) { opacity: 0;}
+.burger-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px);}
 
 /* Menu */
 .menu {
@@ -127,7 +105,7 @@ header {
   flex-direction: column;
   width: 200px;
   text-align: center;
-  z-index: 10;
+  z-index: 5;
 }
 
 .menu.active {
@@ -135,25 +113,14 @@ header {
   animation: glitchMenu 0.5s;
 }
 
-.menu ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menu li {
-  margin: 1rem 0;
-}
-
+.menu ul { list-style: none; padding: 0; margin: 0;}
+.menu li { margin: 1rem 0;}
 .menu a {
   color: #53f36e;
   text-decoration: none;
   font-size: 1.2rem;
 }
-
-.menu a:hover {
-  color: #0f0;
-}
+.menu a:hover { color: #0f0; }
 
 @keyframes glitchMenu {
   0% { transform: translate(0,0); }
@@ -163,3 +130,4 @@ header {
   80% { transform: translate(1px, -2px); }
   100% { transform: translate(0,0); }
 }
+
