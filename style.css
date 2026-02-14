@@ -154,4 +154,23 @@ button {
     transition: opacity 0.8s ease;
 }
 
+.hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #001a12, black);
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: #00ff99;
+}
+
+.hero p {
+    opacity: 0.8;
+}
+
 
