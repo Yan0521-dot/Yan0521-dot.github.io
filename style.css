@@ -1,155 +1,118 @@
-/* Root & Colors */
-:root {
-  --accent: hsl(183, 38%, 57%);
-  --shadow: hsl(10, 100%, 60%);
-  --header-height: 80px;
-}
-
-/* Body */
 body {
   margin: 0;
-  font-family: 'Gloria Hallelujah', cursive;
-  background: #0a0a0a;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  font-family: 'Courier New', monospace;
+  background: #0b0b0b;
+  color: white;
 }
 
-/* Header */
+/* HEADER */
+
 .cyber-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1rem;
-  height: var(--header-height);
-  background: #111;
-  border-bottom: 2px solid var(--accent);
+  padding: 1rem 2rem;
   position: relative;
+  border-bottom: 1px solid #4ade80;
 }
 
 .header-left {
-  font-size: 1.5rem;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-/* Burger Menu */
-#burgerBtn {
+.ctf-flag {
+  color: #4ade80;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* BURGER */
+
+.burger {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 30px;
-  height: 22px;
+  width: 26px;
+  height: 18px;
+  background: none;
+  border: none;
   cursor: pointer;
 }
 
-#burgerBtn span {
+.burger span {
   display: block;
-  height: 4px;
-  width: 100%;
-  background: var(--accent);
+  height: 3px;
+  background: #4ade80;
   border-radius: 2px;
   transition: 0.3s;
 }
 
-/* Burger Animation */
-#burgerBtn.active span:nth-child(1) {
+.burger.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
-#burgerBtn.active span:nth-child(2) {
+.burger.active span:nth-child(2) {
   opacity: 0;
 }
-#burgerBtn.active span:nth-child(3) {
+.burger.active span:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Menu */
-#menu {
+/* MENU */
+
+.menu {
   position: absolute;
-  top: var(--header-height);
-  right: 0;
+  top: 60px;
+  right: 20px;
   background: #111;
-  width: 200px;
+  border: 2px solid #4ade80;
+  padding: 1rem;
   display: none;
-  flex-direction: column;
-  border-left: 2px solid var(--accent);
-  border-bottom: 2px solid var(--accent);
-  z-index: 100;
+  border-radius: 8px;
 }
 
-#menu.active {
-  display: flex;
+.menu.active {
+  display: block;
 }
 
-#menu a {
-  color: var(--accent);
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  margin: 0.5rem 0;
+}
+
+.menu a {
+  color: #4ade80;
   text-decoration: none;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #222;
-  transition: background 0.2s;
 }
 
-#menu a:hover {
-  background: rgba(0, 255, 255, 0.1);
-}
+/* INSTRUCTION */
 
-/* Cyber Button */
-.cyber-btn {
-  --corner: 12px;
-  width: 140px;
-  text-align: left;
-  text-transform: uppercase;
+.instruction {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #4ade80;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.5rem;
-  border: 0;
-  background: transparent;
-  position: relative;
-  color: var(--accent);
-  cursor: pointer;
-  overflow: hidden;
 }
 
-.cyber-btn .backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 255, 255, 0.1);
-  z-index: -1;
-  border-radius: var(--corner);
-  backdrop-filter: blur(4px);
+.instruction svg {
+  width: 40px;
+  height: 40px;
 }
 
-/* Glitch Effect */
-.cyber-btn .glitch {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
+/* SECTIONS */
 
-.cyber-btn .glitch span {
-  position: absolute;
-  color: var(--accent);
-  font-weight: bold;
-  clip: rect(0, 100%, 0, 0);
-  animation: glitch 2s infinite linear alternate-reverse;
-}
-
-@keyframes glitch {
-  0% { clip: rect(0, 100%, 0, 0); transform: translate(0,0); }
-  10% { clip: rect(5px, 100%, 25px, 0); transform: translate(-2px,-2px);}
-  20% { clip: rect(10px, 100%, 30px, 0); transform: translate(2px,2px);}
-  30% { clip: rect(15px, 100%, 40px, 0); transform: translate(-2px,2px);}
-  40% { clip: rect(20px, 100%, 45px, 0); transform: translate(2px,-2px);}
-  50% { clip: rect(25px, 100%, 50px, 0); transform: translate(-1px,1px);}
-  60% { clip: rect(0, 100%, 0, 0); transform: translate(0,0);}
-  100% { clip: rect(0, 100%, 0, 0); transform: translate(0,0);}
+.section {
+  padding: 100px 20px;
+  min-height: 100vh;
+  border-bottom: 1px solid #222;
 }
