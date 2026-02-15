@@ -2,36 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>UR_CYBER{F0RC3}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aathityan Portfolio</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap">
 </head>
 <body>
-  <header class="cyber-header">
-    <div class="header-left">UR_CYBER{F0RC3}</div>
-    <div id="burgerBtn">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <nav id="menu">
-      <a href="#">Home</a>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-    </nav>
-  </header>
 
-  <main>
-    <button class="cyber-btn">
-      <span class="backdrop"></span>
-      <kbd>U</kbd>
-      <span>Upgrade</span>
-      <div class="glitch" aria-hidden="true">
-        <span>U</span><span>p</span><span>g</span><span>r</span><span>a</span><span>d</span><span>e</span>
-      </div>
+<header class="cyber-header">
+
+  <div class="header-left">
+    <span class="ctf-flag">UR_CYBER{F0RC3}</span>
+
+    <button class="burger" id="burgerBtn" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
-  </main>
+  </div>
 
-  <script src="script.js"></script>
+  <div class="instruction">
+    <svg viewBox="0 0 144 141" fill="none">
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M129.189 0.049C128.744 0.119 126.422 0.377 124.03 0.636C114.719 1.645 109.23 2.489 108.058 3.099C107.119 3.569 106.674 4.343 106.674 5.446C106.674 6.713 107.424 7.511 109.043 7.98C110.403 8.379 110.825 8.426 118.87 9.528C121.778 9.927 124.288 10.303 124.475 10.373C124.663 10.444 122.951 11.101 120.676 11.875C110.028 15.441 100.412 20.768 91.734 27.924C88.38 30.716 81.696 37.427 79.21 40.501C73.839 47.212 69.687 54.814 66.568 63.73C65.935 65.467 65.348 66.898 65.255 66.898C65.137 66.898 63.777 66.734 62.229 66.569C52.965 65.513 43.185 68.165 34.132 74.219C24.774 80.46 18.535 87.734 10.537 101.742C2.539 115.726 -1.096 127.482 0.288 135.014C0.898 138.463 2.047 140.035 3.97 140.082Z"
+        fill="currentColor"/>
+    </svg>
+    <span>Use this!</span>
+  </div>
+
+  <nav class="menu" id="menu">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#certificate">Certificate</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#social">Social</a></li>
+      <li><a href="#community">Community</a></li>
+    </ul>
+  </nav>
+
+</header>
+
+<section id="home" class="section">
+  <h1>Welcome</h1>
+  <p>This is my portfolio.</p>
+</section>
+
+<section id="certificate" class="section">
+  <h1>Certificates</h1>
+</section>
+
+<section id="about" class="section">
+  <h1>About</h1>
+</section>
+
+<section id="social" class="section">
+  <h1>Social Media</h1>
+</section>
+
+<section id="community" class="section">
+  <h1>Community</h1>
+</section>
+
+<script src="script.js"></script>
 </body>
 </html>
